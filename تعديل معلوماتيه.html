@@ -1,0 +1,1750 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>Nursing Informatics</title>
+    <style>
+        /* ===== BASE ===== */
+        :root {
+            --bg1: #0a0e1a;
+            --bg2: #141e33;
+            --primary: #00d4ff;
+            --primary-dark: #0099cc;
+            --accent: #facc15;
+            --danger: #f87171;
+            --success: #34d399;
+            --card-bg: rgba(255, 255, 255, 0.04);
+            --card-border: rgba(255, 255, 255, 0.08);
+            --text: #e8edf5;
+            --muted: #94a3b8;
+            --shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            --glow: 0 0 30px rgba(0, 212, 255, 0.06);
+            --radius: 16px;
+            --header-bg: rgba(255, 255, 255, 0.03);
+            --header-border: rgba(255, 255, 255, 0.04);
+            --footer-border: rgba(255, 255, 255, 0.03);
+            --table-header-bg: rgba(0, 212, 255, 0.08);
+            --card-title-bg: rgba(0, 212, 255, 0.06);
+            --highlight-bg: #facc15;
+            --highlight-text: #0f172a;
+        }
+
+        [data-theme="light"] {
+            --bg1: #f0f4f8;
+            --bg2: #e2e8f0;
+            --card-bg: rgba(255, 255, 255, 0.85);
+            --card-border: rgba(0, 0, 0, 0.1);
+            --text: #0f172a;
+            --muted: #475569;
+            --shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            --glow: 0 0 30px rgba(0, 212, 255, 0.02);
+            --header-bg: rgba(255, 255, 255, 0.7);
+            --header-border: rgba(0, 0, 0, 0.04);
+            --footer-border: rgba(0, 0, 0, 0.04);
+            --table-header-bg: rgba(0, 212, 255, 0.12);
+            --card-title-bg: rgba(0, 212, 255, 0.08);
+            --highlight-bg: #facc15;
+            --highlight-text: #0f172a;
+        }
+
+        .highlight-text {
+            background-color: var(--highlight-bg);
+            color: var(--highlight-text);
+            padding: 0 4px;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, 'Cairo', sans-serif;
+            background: linear-gradient(135deg, var(--bg1), var(--bg2), #0f1a2b);
+            min-height: 100vh;
+            color: var(--text);
+            padding: 16px 8px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            transition: background 0.4s ease;
+        }
+        .app { max-width: 1100px; width: 100%; }
+
+        /* ===== HEADER ===== */
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+            padding: 16px 16px;
+            background: var(--header-bg);
+            border-radius: 20px;
+            border: 1px solid var(--header-border);
+            backdrop-filter: blur(4px);
+        }
+        .header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        .header h1 {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: #fff;
+            text-shadow: 0 4px 25px rgba(0, 212, 255, 0.15);
+            transition: color 0.3s ease;
+        }
+        [data-theme="light"] .header h1 { color: #0f172a; text-shadow: none; }
+        .header h1 .highlight {
+            background: linear-gradient(135deg, var(--primary), #818cf8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .header .sub {
+            color: var(--primary);
+            font-weight: 600;
+            letter-spacing: 1.5px;
+            font-size: 0.8rem;
+            margin-top: 2px;
+        }
+        .header .creator {
+            color: var(--muted);
+            font-size: 0.75rem;
+            margin-top: 4px;
+        }
+        .header .creator .name { color: var(--text); font-weight: 700; }
+        .theme-toggle {
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 50%;
+            width: 42px;
+            height: 42px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text);
+        }
+        .theme-toggle:hover {
+            border-color: var(--primary);
+            background: rgba(0, 212, 255, 0.08);
+            transform: scale(1.05);
+        }
+        [data-theme="light"] .theme-toggle {
+            background: rgba(0, 0, 0, 0.04);
+            border-color: rgba(0, 0, 0, 0.06);
+        }
+
+        /* ===== TABS ===== */
+        .tabs-wrap {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-bottom: 16px;
+            justify-content: center;
+        }
+        .tab-btn {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 30px;
+            padding: 8px 14px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            color: var(--muted);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-align: center;
+            line-height: 1.3;
+        }
+        .tab-btn:hover { border-color: var(--primary); color: var(--text); }
+        .tab-btn.active {
+            border-color: var(--primary);
+            background: rgba(0, 212, 255, 0.08);
+            color: var(--primary);
+        }
+        .tab-btn .en { display: block; font-size: 0.7rem; }
+        .tab-btn .ar { display: block; font-size: 0.55rem; opacity: 0.7; }
+
+        /* ===== CARDS ===== */
+        .card {
+            background: var(--card-bg);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--card-border);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow), var(--glow);
+            padding: 18px 14px;
+            margin-bottom: 16px;
+            transition: background 0.3s ease, border 0.3s ease;
+            display: none;
+        }
+        .card.active { display: block; }
+        .card h2 {
+            font-size: 1.3rem;
+            color: var(--text);
+            border-right: 4px solid var(--primary);
+            padding-right: 12px;
+            margin-bottom: 16px;
+            font-weight: 700;
+        }
+
+        /* ===== SLIDES ===== */
+        .slide-container {
+            position: relative;
+            min-height: 300px;
+        }
+        .slide {
+            display: none;
+            animation: fadeSlide 0.3s ease;
+        }
+        .slide.active { display: block; }
+        @keyframes fadeSlide {
+            from { opacity: 0; transform: translateX(15px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        .slide-progress {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+            font-size: 0.8rem;
+            color: var(--muted);
+        }
+        .slide-progress .bar {
+            flex: 1;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.06);
+            border-radius: 10px;
+            margin: 0 12px;
+            overflow: hidden;
+        }
+        .slide-progress .bar .fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), #818cf8);
+            border-radius: 10px;
+            transition: width 0.3s ease;
+        }
+        .slide-progress .count {
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        .slide-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 20px;
+            gap: 10px;
+        }
+        .slide-nav .btn-nav {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 30px;
+            padding: 10px 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--text);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            min-width: 80px;
+            text-align: center;
+        }
+        .slide-nav .btn-nav:hover:not(:disabled) {
+            background: rgba(0, 212, 255, 0.08);
+            border-color: var(--primary);
+        }
+        .slide-nav .btn-nav:disabled {
+            opacity: 0.3;
+            cursor: default;
+        }
+        .slide-nav .btn-nav.primary {
+            background: var(--primary);
+            color: #0a0e1a;
+            border-color: var(--primary);
+        }
+        .slide-nav .btn-nav.primary:hover:not(:disabled) {
+            background: var(--primary-dark);
+            border-color: var(--primary-dark);
+        }
+        [data-theme="light"] .slide-nav .btn-nav {
+            background: rgba(0, 0, 0, 0.02);
+            border-color: rgba(0, 0, 0, 0.06);
+        }
+
+        /* ===== CARDS GRID ===== */
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 14px;
+            margin-bottom: 8px;
+        }
+
+        .topic-card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 12px;
+            padding: 14px 14px 12px;
+            transition: border-color 0.2s ease;
+            display: flex;
+            flex-direction: column;
+        }
+        .topic-card:hover { border-color: var(--primary); }
+
+        .topic-card .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            padding-bottom: 6px;
+            border-bottom: 2px solid var(--card-title-bg);
+        }
+        .topic-card .card-title {
+            font-weight: 700;
+            font-size: 0.95rem;
+            color: var(--primary);
+            line-height: 1.4;
+            flex: 1;
+        }
+        .topic-card .card-title-ar {
+            color: var(--muted);
+            font-weight: 400;
+            display: none;
+        }
+        .topic-card .card-title-ar.show { display: inline; }
+        .topic-card .card-title-en { display: inline; }
+        .topic-card .card-title-en.hidden { display: none; }
+
+        .topic-card .translate-btn {
+            background: rgba(0, 212, 255, 0.08);
+            border: 1px solid var(--card-border);
+            border-radius: 20px;
+            padding: 3px 12px;
+            font-size: 0.6rem;
+            color: var(--primary);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            white-space: nowrap;
+            flex-shrink: 0;
+            margin-right: 8px;
+        }
+        .topic-card .translate-btn:hover {
+            background: rgba(0, 212, 255, 0.18);
+            border-color: var(--primary);
+        }
+        .topic-card .translate-btn.active {
+            background: rgba(0, 212, 255, 0.18);
+            border-color: var(--primary);
+        }
+
+        .topic-card .card-items {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            flex: 1;
+        }
+        .topic-card .card-items li {
+            padding: 4px 0 4px 0;
+            line-height: 1.6;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+        }
+        [data-theme="light"] .topic-card .card-items li {
+            border-bottom-color: rgba(0, 0, 0, 0.04);
+        }
+        .topic-card .card-items li:last-child { border-bottom: none; }
+
+        /* ===== TTS: English text clickable, NO speaker icon ===== */
+        .topic-card .item-en {
+            font-weight: 600;
+            color: var(--text);
+            font-size: 0.9rem;
+            line-height: 1.6;
+            display: block;
+            text-align: left;
+            direction: ltr;
+            cursor: pointer;
+            transition: color 0.2s ease, background 0.2s ease;
+            border-radius: 4px;
+            padding: 1px 3px;
+            margin-left: -3px;
+        }
+        .topic-card .item-en:hover {
+            color: var(--primary);
+            background: rgba(0, 212, 255, 0.06);
+        }
+        .topic-card .item-en.speaking {
+            color: var(--primary);
+            background: rgba(0, 212, 255, 0.12);
+        }
+
+        .topic-card .item-ar {
+            color: var(--muted);
+            font-size: 0.82rem;
+            line-height: 1.6;
+            text-align: right;
+            direction: rtl;
+            display: none;
+            margin-top: 2px;
+            padding-right: 8px;
+            border-right: 2px solid rgba(0, 212, 255, 0.2);
+        }
+        .topic-card .item-ar.show { display: block; }
+
+        .topic-card .card-items.numbered {
+            counter-reset: item-counter;
+        }
+        .topic-card .card-items.numbered li {
+            padding-right: 28px;
+            position: relative;
+            counter-increment: item-counter;
+        }
+        .topic-card .card-items.numbered li::before {
+            content: counter(item-counter) "-";
+            position: absolute;
+            right: 2px;
+            color: var(--primary);
+            font-weight: 700;
+            font-size: 0.85rem;
+        }
+
+        /* ===== TABLES ===== */
+        .info-table-wrap {
+            overflow-x: auto;
+            margin: 12px 0;
+            border-radius: 10px;
+            border: 1px solid var(--card-border);
+            grid-column: 1 / -1;
+        }
+        .info-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.82rem;
+            min-width: 500px;
+        }
+        .info-table th {
+            background: var(--table-header-bg);
+            color: var(--primary);
+            padding: 8px 6px;
+            text-align: center;
+            border-bottom: 2px solid var(--primary);
+            font-weight: 700;
+        }
+        .info-table td {
+            padding: 8px 6px;
+            border-bottom: 1px solid var(--card-border);
+            vertical-align: top;
+            line-height: 1.5;
+        }
+        .info-table tr:last-child td { border-bottom: none; }
+        .info-table .ar-text {
+            border-right: none;
+            padding-right: 0;
+            margin-top: 2px;
+            font-size: 0.78rem;
+            display: block;
+            color: var(--muted);
+        }
+        .info-table .en-text {
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: color 0.2s ease, background 0.2s ease;
+            border-radius: 4px;
+            padding: 1px 3px;
+            margin-left: -3px;
+            display: inline-block;
+            text-align: left;
+            direction: ltr;
+        }
+        .info-table .en-text:hover {
+            color: var(--primary);
+            background: rgba(0, 212, 255, 0.06);
+        }
+        .info-table .en-text.speaking {
+            color: var(--primary);
+            background: rgba(0, 212, 255, 0.12);
+        }
+
+        @media (max-width: 600px) {
+            .cards-grid { grid-template-columns: 1fr; }
+            .info-table { font-size: 0.72rem; min-width: 350px; }
+            .topic-card .card-title { font-size: 0.85rem; }
+        }
+
+        .footer-credit {
+            text-align: center;
+            color: rgba(255, 255, 255, 0.12);
+            font-size: 0.7rem;
+            margin-top: 24px;
+            padding: 10px 0;
+            border-top: 1px solid var(--footer-border);
+        }
+        [data-theme="light"] .footer-credit { color: rgba(0, 0, 0, 0.2); }
+        .footer-credit .name { color: var(--primary); font-weight: 600; }
+
+        @media (max-width: 768px) {
+            body { padding: 8px 4px; }
+            .header h1 { font-size: 1.4rem; }
+            .tab-btn { padding: 6px 10px; font-size: 0.6rem; }
+            .card { padding: 14px 10px; }
+            .card h2 { font-size: 1.1rem; }
+        }
+
+        .topic-card.full-width { grid-column: 1 / -1; }
+
+        /* ===== PDF DOWNLOAD BUTTON ===== */
+        .pdf-btn {
+            background: rgba(248, 113, 113, 0.1);
+            border: 1px solid rgba(248, 113, 113, 0.3);
+            border-radius: 30px;
+            padding: 8px 18px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--danger);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            margin-top: 8px;
+        }
+        .pdf-btn:hover {
+            background: rgba(248, 113, 113, 0.2);
+            border-color: var(--danger);
+            transform: scale(1.02);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="app">
+        <div class="header">
+            <div class="header-top">
+                <div>
+                    <h1><span class="highlight">Nursing Informatics</span></h1>
+                    <div class="sub"></div>
+                    <div class="creator">Created by <span class="name">MR. YASSIN THARWAT</span></div>
+                </div>
+                <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()" title="تبديل الوضع">☀</button>
+            </div>
+        </div>
+
+        <div class="tabs-wrap" id="tabsContainer"></div>
+        <div id="sectionsContainer"></div>
+        <div class="footer-credit">
+            Created by <span class="name">MR. YASSIN THARWAT</span>
+        </div>
+    </div>
+
+    <script>
+        // ================================================================
+        //  THEME
+        // ================================================================
+        let currentTheme = localStorage.getItem('theme') || 'dark';
+
+        function applyTheme(theme) {
+            document.documentElement.setAttribute('data-theme', theme);
+            document.getElementById('themeToggle').textContent = theme === 'light' ? '☾' : '☀';
+            localStorage.setItem('theme', theme);
+            currentTheme = theme;
+        }
+        function toggleTheme() { applyTheme(currentTheme === 'dark' ? 'light' : 'dark'); }
+
+        // ================================================================
+        //  SLIDE SYSTEM
+        // ================================================================
+        let slideState = {};
+
+        function initSlideState(partId, totalSlides) {
+            slideState[partId] = { current: 0, total: totalSlides };
+        }
+
+        function renderSlide(partId, containerId) {
+            const state = slideState[partId];
+            if (!state) return;
+            const container = document.getElementById(containerId);
+            if (!container) return;
+            const slides = container.querySelectorAll('.slide');
+            slides.forEach((s, i) => s.classList.toggle('active', i === state.current));
+            const progressBar = container.querySelector('.slide-progress .fill');
+            const countSpan = container.querySelector('.slide-progress .count');
+            if (progressBar) progressBar.style.width = ((state.current + 1) / state.total * 100) + '%';
+            if (countSpan) countSpan.textContent = `${state.current + 1} / ${state.total}`;
+            const prevBtn = container.querySelector('.btn-nav.prev');
+            const nextBtn = container.querySelector('.btn-nav.next');
+            if (prevBtn) prevBtn.disabled = state.current === 0;
+            if (nextBtn) nextBtn.disabled = state.current === state.total - 1;
+        }
+
+        function goToSlide(partId, containerId, index) {
+            const state = slideState[partId];
+            if (!state) return;
+            if (index < 0) index = 0;
+            if (index >= state.total) index = state.total - 1;
+            state.current = index;
+            renderSlide(partId, containerId);
+        }
+
+        // ================================================================
+        //  HELPERS
+        // ================================================================
+        function stripHTML(html) {
+            const tmp = document.createElement('div');
+            tmp.innerHTML = html;
+            return tmp.textContent || tmp.innerText || '';
+        }
+
+        function createSlideHTML(title, cardsHTML) {
+            return `
+                <div class="slide">
+                    <h3 style="font-size:1.1rem; color:var(--primary); margin-bottom:12px; border-right:3px solid var(--primary); padding-right:10px;">${title}</h3>
+                    <div class="cards-grid">${cardsHTML}</div>
+                </div>
+            `;
+        }
+
+        function card(title, items, arTitle = '') {
+            const cardId = 'c' + Math.random().toString(36).substr(2, 8);
+            const itemsHTML = items.map((item) => {
+                const en = item.en || item;
+                const ar = item.ar || '';
+                return `<li><span class="item-en" data-text="${stripHTML(en).replace(/"/g, '&quot;')}">${en}</span><span class="item-ar">${ar}</span></li>`;
+            }).join('');
+            const listClass = items.some(i => i.en && i.en.match(/^\d/)) ? 'card-items numbered' : 'card-items simple';
+            return `
+                <div class="topic-card" data-card="${cardId}">
+                    <div class="card-header">
+                        <span class="card-title">
+                            <span class="card-title-en">${title}</span>
+                            <span class="card-title-ar" id="${cardId}-title-ar">${arTitle}</span>
+                        </span>
+                        <button class="translate-btn" data-card="${cardId}" onclick="toggleCardTranslation('${cardId}')">ترجمة</button>
+                    </div>
+                    <ul class="${listClass}">${itemsHTML}</ul>
+                </div>
+            `;
+        }
+
+        function tableCard(title, tableHTML, arTitle = '') {
+            return `
+                <div class="topic-card full-width">
+                    <div class="card-header">
+                        <span class="card-title">
+                            <span class="card-title-en">${title}</span>
+                            <span class="card-title-ar" style="display:block;">${arTitle}</span>
+                        </span>
+                    </div>
+                    <div class="info-table-wrap">${tableHTML}</div>
+                </div>
+            `;
+        }
+
+        function cell(en, ar) {
+            return `<span class="en-text" data-text="${stripHTML(en).replace(/"/g, '&quot;')}">${en}</span><span class="ar-text">${ar}</span>`;
+        }
+
+        function toggleCardTranslation(cardId) {
+            const card = document.querySelector(`.topic-card[data-card="${cardId}"]`);
+            if (!card) return;
+            const arItems = card.querySelectorAll('.item-ar');
+            const titleAr = document.getElementById(`${cardId}-title-ar`);
+            const titleEn = card.querySelector('.card-title-en');
+            const btn = card.querySelector('.translate-btn');
+            const isVisible = arItems.length > 0 && arItems[0].classList.contains('show');
+            arItems.forEach(el => el.classList.toggle('show'));
+            if (titleAr) {
+                titleAr.classList.toggle('show');
+                if (titleEn) titleEn.classList.toggle('hidden');
+            }
+            if (btn) {
+                btn.textContent = isVisible ? 'ترجمة' : 'إخفاء';
+                btn.classList.toggle('active');
+            }
+        }
+
+        // ================================================================
+        //  TEXT-TO-SPEECH (TTS) - Hidden, clicks on English text only
+        // ================================================================
+        function initTTS() {
+            if (!window.speechSynthesis) return;
+            if (window.speechSynthesis.getVoices().length === 0) {
+                window.speechSynthesis.onvoiceschanged = function() {};
+            }
+            document.addEventListener('click', function(e) {
+                const target = e.target.closest('.item-en, .en-text');
+                if (!target) return;
+                if (e.target.closest('.translate-btn')) return;
+                const text = (target.getAttribute('data-text') || target.textContent || '').trim();
+                if (!text) return;
+                speakText(text, target);
+            });
+        }
+
+        function speakText(text, element) {
+            const synth = window.speechSynthesis;
+            if (!synth) return;
+            synth.cancel();
+            document.querySelectorAll('.speaking').forEach(el => el.classList.remove('speaking'));
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.lang = 'en-US';
+            utterance.rate = 0.9;
+            utterance.pitch = 1;
+            utterance.volume = 1;
+            const voices = synth.getVoices();
+            const englishVoice = voices.find(v => v.lang.startsWith('en') && v.name.includes('Google'))
+                || voices.find(v => v.lang.startsWith('en-US'))
+                || voices.find(v => v.lang.startsWith('en'));
+            if (englishVoice) utterance.voice = englishVoice;
+
+            utterance.onstart = () => { if (element) element.classList.add('speaking'); };
+            utterance.onend = () => { if (element) element.classList.remove('speaking'); };
+            utterance.onerror = () => { if (element) element.classList.remove('speaking'); };
+            synth.speak(utterance);
+        }
+
+        // ================================================================
+        //  PDF DOWNLOAD
+        // ================================================================
+        function downloadPDF(sectionId) {
+            const sec = slidesData[sectionId];
+            if (!sec) return;
+
+            let allSlidesHTML = '';
+            sec.slides.forEach((slide) => {
+                let cardsHTML = '';
+                if (slide.cards) {
+                    slide.cards.forEach(c => { cardsHTML += c; });
+                }
+                allSlidesHTML += `
+                    <div class="pdf-slide">
+                        <div class="pdf-slide-header">
+                            <h2>${slide.title}</h2>
+                        </div>
+                        <div class="pdf-cards">${cardsHTML}</div>
+                    </div>
+                `;
+            });
+
+            const printWindow = window.open('', '_blank');
+            if (!printWindow) {
+                alert('يرجى السماح بالنوافذ المنبثقة لتحميل PDF');
+                return;
+            }
+
+            printWindow.document.write(`
+                <!DOCTYPE html>
+                <html lang="ar" dir="rtl">
+                <head>
+                    <meta charset="UTF-8">
+                    <title>Nursing Informatics</title>
+                    <style>
+                        @page { margin: 12mm 10mm; size: A4; }
+                        * { margin: 0; padding: 0; box-sizing: border-box; }
+                        html, body {
+                            -webkit-print-color-adjust: exact;
+                            print-color-adjust: exact;
+                        }
+                        body {
+                            font-family: 'Segoe UI', Tahoma, sans-serif;
+                            font-size: 13px;
+                            color: #111;
+                            line-height: 1.55;
+                            orphans: 2;
+                            widows: 2;
+                        }
+                        .pdf-subject-header {
+                            text-align: center;
+                            border-bottom: 3px solid #0099cc;
+                            padding-bottom: 8px;
+                            margin-bottom: 14px;
+                        }
+                        .pdf-subject-header h1 {
+                            font-size: 26px;
+                            color: #0099cc;
+                            font-weight: 800;
+                            letter-spacing: 2px;
+                        }
+                        .pdf-subject-header .creator {
+                            font-size: 12px;
+                            color: #666;
+                            margin-top: 3px;
+                        }
+                        .pdf-slide {
+                            margin-bottom: 14px;
+                            padding: 0;
+                            page-break-inside: auto;
+                            break-inside: auto;
+                        }
+                        .pdf-slide-header {
+                            margin-bottom: 8px;
+                            padding-bottom: 5px;
+                            border-bottom: 2.5px solid #0099cc;
+                            page-break-after: avoid;
+                            break-after: avoid;
+                        }
+                        .pdf-slide-header h2 {
+                            font-size: 16px;
+                            color: #0077aa;
+                            font-weight: 700;
+                            line-height: 1.35;
+                        }
+                        .pdf-cards {
+                            display: block;
+                        }
+                        .pdf-cards .topic-card {
+                            display: block;
+                            border: 1.5px solid #e0e0e0;
+                            border-radius: 6px;
+                            padding: 8px 10px;
+                            background: #ffffff;
+                            margin-bottom: 8px;
+                            page-break-inside: auto;
+                            break-inside: auto;
+                        }
+                        .pdf-cards .card-header {
+                            border-bottom: 2px solid #0099cc;
+                            padding-bottom: 4px;
+                            margin-bottom: 6px;
+                            page-break-after: avoid;
+                            break-after: avoid;
+                        }
+                        .pdf-cards .card-title {
+                            font-size: 13.5px;
+                            font-weight: 700;
+                            color: #0077aa;
+                            line-height: 1.35;
+                        }
+                        .pdf-cards .card-title-ar {
+                            font-size: 12px;
+                            color: #555;
+                            font-weight: 400;
+                            display: block;
+                            margin-top: 2px;
+                        }
+                        .pdf-cards .card-title-en { display: block; }
+                        .pdf-cards .translate-btn { display: none; }
+                        .pdf-cards ul { list-style: none; padding: 0; margin: 0; }
+                        .pdf-cards li {
+                            padding: 4px 0;
+                            border-bottom: 1px dotted #e5e5e5;
+                            font-size: 12.5px;
+                            line-height: 1.5;
+                            page-break-inside: avoid;
+                            break-inside: avoid;
+                        }
+                        .pdf-cards li:last-child { border-bottom: none; }
+                        .pdf-cards .item-en {
+                            font-weight: 600;
+                            display: block;
+                            text-align: left;
+                            direction: ltr;
+                            font-size: 12.5px;
+                            color: #111;
+                        }
+                        .pdf-cards .item-ar {
+                            display: block;
+                            color: #555;
+                            font-size: 12px;
+                            text-align: right;
+                            direction: rtl;
+                            padding-right: 6px;
+                            border-right: 3px solid #cce;
+                            margin-top: 3px;
+                            line-height: 1.5;
+                        }
+                        .pdf-cards .highlight-text {
+                            background: #facc15;
+                            color: #0f172a;
+                            padding: 0 3px;
+                            border-radius: 3px;
+                        }
+                        .pdf-cards .numbered { counter-reset: item-counter; }
+                        .pdf-cards .numbered li {
+                            padding-right: 22px;
+                            position: relative;
+                            counter-increment: item-counter;
+                        }
+                        .pdf-cards .numbered li::before {
+                            content: counter(item-counter) "-";
+                            position: absolute;
+                            right: 0;
+                            color: #0099cc;
+                            font-weight: 700;
+                            font-size: 12.5px;
+                        }
+                        .info-table-wrap {
+                            margin: 8px 0;
+                            border: 1px solid #ccc;
+                            border-radius: 6px;
+                            overflow: visible;
+                            page-break-inside: auto;
+                            break-inside: auto;
+                        }
+                        .info-table {
+                            width: 100%;
+                            border-collapse: collapse;
+                            font-size: 12px;
+                            page-break-inside: auto;
+                        }
+                        .info-table thead {
+                            display: table-header-group;
+                        }
+                        .info-table tr {
+                            page-break-inside: avoid;
+                            break-inside: avoid;
+                        }
+                        .info-table th {
+                            background: #e6f4fa;
+                            color: #0077aa;
+                            padding: 5px 4px;
+                            text-align: center;
+                            border-bottom: 2px solid #0099cc;
+                            font-weight: 700;
+                        }
+                        .info-table td {
+                            padding: 5px 4px;
+                            border-bottom: 1px solid #e0e0e0;
+                            vertical-align: top;
+                            line-height: 1.45;
+                        }
+                        .info-table tr:last-child td { border-bottom: none; }
+                        .info-table .ar-text {
+                            display: block;
+                            margin-top: 2px;
+                            font-size: 11.5px;
+                            color: #666;
+                        }
+                        .info-table .en-text {
+                            font-size: 12px;
+                            display: inline-block;
+                            text-align: left;
+                            direction: ltr;
+                        }
+                    </style>
+                </head>
+                <body>
+                    <div class="pdf-subject-header">
+                        <h1>NURSING INFORMATICS</h1>
+                        <div class="creator">Created by MR. YASSIN THARWAT</div>
+                    </div>
+                    ${allSlidesHTML}
+                </body>
+                </html>
+            `);
+            printWindow.document.close();
+            setTimeout(() => {
+                printWindow.focus();
+                printWindow.print();
+            }, 600);
+        }
+
+        // ================================================================
+        //  DATA: NURSING INFORMATICS LECTURE 1, 2, 3, 4 & 5
+        // ================================================================
+        const lecture1Data = {
+            titleEn: 'Lecture 1',
+            titleAr: 'المحاضرة الأولي',
+            slides: [
+                {
+                    title: 'Introduction & Nursing Informatics · المقدمة وتعريف معلوماتية التمريض',
+                    cards: [
+                        card('Nursing Informatics Definition · تعريف معلوماتية التمريض', [
+                            { en: 'An <span class="highlight-text">interdisciplinary field</span> that integrates nursing science with information management and analytical sciences to improve healthcare outcomes.', ar: 'مجال <span class="highlight-text">متعدد التخصصات</span> يدمج علوم التمريض مع إدارة المعلومات والعلوم التحليلية لتحسين نتائج الرعاية الصحية.' },
+                            { en: 'Focuses on how nurses use <span class="highlight-text">data, information, and technology</span> to enhance patient care.', ar: 'يركز على كيفية استخدام الممرضين <span class="highlight-text">للبيانات والمعلومات والتكنولوجيا</span> لتعزيز رعاية المرضى.' },
+                            { en: 'Leveraging technology to ensure nurses can <span class="highlight-text">access, share, and analyze</span> patient information effectively.', ar: 'الاستفادة من التكنولوجيا لضمان قدرة الممرضين على <span class="highlight-text">الوصول إلى</span> معلومات المرضى <span class="highlight-text">ومشاركتها وتحليلها</span> بفعالية.' }
+                        ], 'تعريف معلوماتية التمريض:'),
+                        card('Role in Information Systems · الدور في أنظمة المعلومات', [
+                            { en: '1. Improving <span class="highlight-text">communication</span>.', ar: '1. تحسين <span class="highlight-text">التواصل</span>.' },
+                            { en: '2. Reducing <span class="highlight-text">errors</span>.', ar: '2. تقليل <span class="highlight-text">الأخطاء</span>.' },
+                            { en: '3. Supporting <span class="highlight-text">evidence-based practice</span>.', ar: '3. دعم <span class="highlight-text">الممارسة القائمة على الأدلة</span>.' },
+                            { en: '4. Supporting <span class="highlight-text">decision support systems</span>.', ar: '4. دعم <span class="highlight-text">أنظمة دعم القرار</span>.' }
+                        ], 'الدور في أنظمة المعلومات:'),
+                        card('Optimization Goals · أهداف التحسين', [
+                            { en: 'Enhance <span class="highlight-text">patient care</span> quality.', ar: 'تحسين جودة <span class="highlight-text">رعاية المرضى</span>.' },
+                            { en: 'Optimize <span class="highlight-text">healthcare delivery</span>.', ar: 'تحسين <span class="highlight-text">تقديم الرعاية الصحية</span>.' },
+                            { en: 'Support <span class="highlight-text">clinical decision-making</span>.', ar: 'دعم <span class="highlight-text">اتخاذ القرارات السريرية</span>.' }
+                        ], 'أهداف التحسين:')
+                    ]
+                },
+                {
+                    title: 'Basic Terminology (1-5) · المصطلحات الأساسية',
+                    cards: [
+                        card('1. Computer · الحاسوب', [
+                            { en: 'An electronic device that <span class="highlight-text">collects, stores, processes, and retrieves</span> data.', ar: 'جهاز إلكتروني <span class="highlight-text">يجمع ويخزن ويعالج ويسترجع</span> البيانات.' }
+                        ], 'الحاسوب:'),
+                        card('2. Data · البيانات', [
+                            { en: 'A collection of <span class="highlight-text">numbers, characters, or facts</span> gathered according to some perceived need for analysis (e.g., vital signs).', ar: 'مجموعة من <span class="highlight-text">الأرقام أو الحروف أو الحقائق</span> تُجمع وفقاً لبعض الحاجة المدركة للتحليل (مثل العلامات الحيوية).' }
+                        ], 'البيانات:'),
+                        card('3. Information · المعلومات', [
+                            { en: 'Data that has been <span class="highlight-text">interpreted</span> (e.g., patient temperature plotted into a graph).', ar: 'بيانات تم <span class="highlight-text">تفسيرها</span> (مثل درجة حرارة المريض عندما تُرسم في رسم بياني).' }
+                        ], 'المعلومات:'),
+                        card('4. Informatics · المعلوماتية', [
+                            { en: 'The <span class="highlight-text">science and art of turning data into information</span>.', ar: '<span class="highlight-text">علم وفن تحويل البيانات إلى معلومات</span>.' }
+                        ], 'المعلوماتية:'),
+                        card('5. Nursing Informatics (NI) · معلوماتية التمريض', [
+                            { en: 'The use of <span class="highlight-text">information and computer technology</span> to support all aspects of nursing practice.', ar: 'استخدام <span class="highlight-text">تكنولوجيا المعلومات والحاسوب</span> لدعم جميع جوانب ممارسة التمريض.' }
+                        ], 'معلوماتية التمريض:')
+                    ]
+                },
+                {
+                    title: 'Healthcare Systems Terminology (6-12) · مصطلحات أنظمة الرعاية الصحية',
+                    cards: [
+                        card('6. Management Information System (MIS) · نظام معلومات الإدارة', [
+                            { en: 'A defined set of <span class="highlight-text">techniques to capture and collect data</span>, analytical tools, operating policies, and reporting protocols for management decision making.', ar: 'مجموعة محددة من <span class="highlight-text">تقنيات التقاط وجمع البيانات</span> والأدوات التحليلية والسياسات التشغيلية وبروتوكولات الإبلاغ لاتخاذ قرارات الإدارة.' },
+                            { en: 'Generally provides data about an organization\'s operations, services, employees, and clients.', ar: 'توفر عموماً بيانات عن عمليات المنظمة وخدماتها وموظفيها وعملائها.' }
+                        ], 'نظام معلومات الإدارة:'),
+                        card('7. Hospital Information System (HIS) · نظام معلومات المستشفى', [
+                            { en: 'An <span class="highlight-text">integrated system</span> used in healthcare settings to manage patient information.', ar: '<span class="highlight-text">نظام متكامل</span> يُستخدم في أماكن الرعاية الصحية لإدارة معلومات المرضى.' },
+                            { en: 'Originally an add-on to the hospital accounting system; today a <span class="highlight-text">patient-centered collaborative care delivery framework</span>.', ar: 'كان في الأصل إضافة لنظام محاسبة المستشفى؛ واليوم هو <span class="highlight-text">إطار تقديم رعاية تعاونية متمركز حول المريض</span>.' }
+                        ], 'نظام معلومات المستشفى:'),
+                        card('8. Electronic Health Record (EHR) · السجل الصحي الإلكتروني', [
+                            { en: 'A <span class="highlight-text">digital version of a patient\'s paper chart</span> containing comprehensive health information that can be shared across different healthcare settings.', ar: '<span class="highlight-text">نسخة رقمية من مخطط المريض الورقي</span> تحتوي على معلومات صحية شاملة يمكن مشاركتها بين مختلف أماكن الرعاية الصحية.' }
+                        ], 'السجل الصحي الإلكتروني:'),
+                        card('9. Electronic Medical Record (EMR) · السجل الطبي الإلكتروني', [
+                            { en: 'A digital record of a patient\'s medical history maintained by a <span class="highlight-text">single healthcare provider or organization</span>, typically for use within that organization.', ar: 'سجل رقمي للتاريخ الطبي للمريض يحتفظ به <span class="highlight-text">مقدم رعاية صحية أو مؤسسة واحدة</span>، ويُستخدم عادةً داخل تلك المؤسسة.' }
+                        ], 'السجل الطبي الإلكتروني:'),
+                        card('10. Clinical Decision Support System (CDSS) · نظام دعم القرار السريري', [
+                            { en: 'A health information technology system designed to assist clinicians in making clinical decisions by providing <span class="highlight-text">evidence-based knowledge</span> in the context of patient-specific data.', ar: 'نظام تكنولوجيا معلومات صحية مُصمم لمساعدة الأطباء في اتخاذ القرارات السريرية من خلال توفير <span class="highlight-text">معرفة قائمة على الأدلة</span> في سياق بيانات المريض المحددة.' }
+                        ], 'نظام دعم القرار السريري:'),
+                        card('11. Health Information Exchange (HIE) · تبادل المعلومات الصحية', [
+                            { en: 'The <span class="highlight-text">electronic sharing of health-related information</span> among different healthcare organizations to facilitate coordinated care.', ar: '<span class="highlight-text">المشاركة الإلكترونية للمعلومات الصحية</span> بين مختلف مؤسسات الرعاية الصحية لتسهيل الرعاية المنسقة.' }
+                        ], 'تبادل المعلومات الصحية:'),
+                        card('12. Interoperability · قابلية التشغيل البيني', [
+                            { en: 'The ability of different information systems, devices, or applications to <span class="highlight-text">connect and communicate</span> in a coordinated manner within and across organizational boundaries.', ar: 'قدرة أنظمة المعلومات أو الأجهزة أو التطبيقات المختلفة على <span class="highlight-text">الاتصال والتواصل</span> بطريقة منسقة داخل وعبر الحدود التنظيمية.' }
+                        ], 'قابلية التشغيل البيني:')
+                    ]
+                },
+                {
+                    title: 'Advanced Terminology (13-23) · مصطلحات متقدمة',
+                    cards: [
+                        card('13. Telehealth · الصحة عن بُعد', [
+                            { en: 'The use of <span class="highlight-text">digital communication technologies</span> to deliver healthcare services and information remotely, including telemedicine, remote monitoring, and patient education.', ar: 'استخدام <span class="highlight-text">تقنيات الاتصال الرقمي</span> لتقديم خدمات الرعاية الصحية والمعلومات عن بُعد، بما في ذلك التطبيب عن بُعد والمراقبة عن بُعد وتعليم المرضى.' }
+                        ], 'الصحة عن بُعد:'),
+                        card('14. Nursing Informatics Specialist · أخصائي معلوماتية التمريض', [
+                            { en: 'A healthcare professional who integrates <span class="highlight-text">nursing science, computer science, and information science</span> to manage and communicate data, information, and knowledge in nursing practice.', ar: 'متخصص رعاية صحية يدمج <span class="highlight-text">علوم التمريض وعلوم الحاسوب وعلوم المعلومات</span> لإدارة وتوصيل البيانات والمعلومات والمعرفة في ممارسة التمريض.' }
+                        ], 'أخصائي معلوماتية التمريض:'),
+                        card('15. Patient Portal · بوابة المريض', [
+                            { en: 'An <span class="highlight-text">online platform</span> that gives patients access to their personal health information and allows them to communicate with their healthcare providers.', ar: '<span class="highlight-text">منصة إلكترونية</span> تمنح المرضى الوصول إلى معلوماتهم الصحية الشخصية وتسمح لهم بالتواصل مع مقدمي الرعاية الصحية.' }
+                        ], 'بوابة المريض:'),
+                        card('16. Health Informatics · المعلوماتية الصحية', [
+                            { en: 'A <span class="highlight-text">broader field</span> encompassing the management of health information across all aspects of healthcare, including nursing informatics, medical informatics, and public health informatics.', ar: '<span class="highlight-text">مجال أوسع</span> يشمل إدارة المعلومات الصحية في جميع جوانب الرعاية الصحية، بما في ذلك معلوماتية التمريض والمعلوماتية الطبية ومعلوماتية الصحة العامة.' }
+                        ], 'المعلوماتية الصحية:'),
+                        card('17. Usability · قابلية الاستخدام', [
+                            { en: 'The <span class="highlight-text">effectiveness, efficiency, and satisfaction</span> with which specific users can achieve a particular set of tasks in a given environment, often related to the design of healthcare technologies.', ar: '<span class="highlight-text">الفعالية والكفاءة والرضا</span> التي يمكن بها لمستخدمين محددين تحقيق مجموعة معينة من المهام في بيئة معينة، وغالباً ما تتعلق بتصميم تقنيات الرعاية الصحية.' }
+                        ], 'قابلية الاستخدام:'),
+                        card('18. Data Standardization · توحيد البيانات', [
+                            { en: 'The process of converting data from different sources into a <span class="highlight-text">common format</span> that allows for comparison, sharing, and analysis across systems.', ar: 'عملية تحويل البيانات من مصادر مختلفة إلى <span class="highlight-text">تنسيق مشترك</span> يسمح بالمقارنة والمشاركة والتحليل عبر الأنظمة.' }
+                        ], 'توحيد البيانات:'),
+                        card('19. Clinical Workflow · سير العمل السريري', [
+                            { en: 'The <span class="highlight-text">sequence of processes</span> through which healthcare is delivered to patients, which can be optimized through the integration of informatics systems.', ar: '<span class="highlight-text">تسلسل العمليات</span> التي يتم من خلالها تقديم الرعاية الصحية للمرضى، والتي يمكن تحسينها من خلال دمج أنظمة المعلوماتية.' }
+                        ], 'سير العمل السريري:'),
+                        card('20. Health Information Management (HIM) · إدارة المعلومات الصحية', [
+                            { en: 'The practice of <span class="highlight-text">acquiring, analyzing, and protecting</span> digital and traditional medical information vital to providing quality patient care.', ar: 'ممارسة <span class="highlight-text">الحصول على وتحليل وحماية</span> المعلومات الطبية الرقمية والتقليدية الحيوية لتقديم رعاية صحية عالية الجودة.' }
+                        ], 'إدارة المعلومات الصحية:'),
+                        card('21. Interdisciplinary Teamwork · العمل الجماعي متعدد التخصصات', [
+                            { en: 'Collaboration among healthcare professionals from different disciplines to achieve <span class="highlight-text">better patient outcomes</span>, supported by shared access to information through informatics.', ar: 'التعاون بين متخصصي الرعاية الصحية من تخصصات مختلفة لتحقيق <span class="highlight-text">نتائج أفضل للمرضى</span>، مدعوم بالوصول المشترك إلى المعلومات من خلال المعلوماتية.' }
+                        ], 'العمل الجماعي متعدد التخصصات:'),
+                        card('22. Information Governance · حوكمة المعلومات', [
+                            { en: 'The <span class="highlight-text">policies and procedures</span> that ensure the accurate and secure handling of health information throughout its lifecycle.', ar: '<span class="highlight-text">السياسات والإجراءات</span> التي تضمن التعامل الدقيق والآمن مع المعلومات الصحية طوال دورة حياتها.' }
+                        ], 'حوكمة المعلومات:'),
+                        card('23. Clinical Documentation Improvement (CDI) · تحسين التوثيق السريري', [
+                            { en: 'The process of improving healthcare records to ensure <span class="highlight-text">accurate representation</span> of a patient\'s clinical status, which can then be translated into accurate coding.', ar: 'عملية تحسين السجلات الصحية لضمان <span class="highlight-text">تمثيل دقيق</span> للحالة السريرية للمريض، والتي يمكن بعد ذلك ترجمتها إلى ترميز دقيق.' }
+                        ], 'تحسين التوثيق السريري:')
+                    ]
+                },
+                {
+                    title: 'Elements & Importance · العناصر والأهمية',
+                    cards: [
+                        card('Elements of Nursing Informatics · عناصر معلوماتية التمريض', [
+                            { en: '1. <span class="highlight-text">Data</span> (collection, management, and analysis).', ar: '1. <span class="highlight-text">البيانات</span> (الجمع والإدارة والتحليل).' },
+                            { en: '2. <span class="highlight-text">Information</span> (creation, dissemination, and utilization).', ar: '2. <span class="highlight-text">المعلومات</span> (الإنشاء والنشر والاستخدام).' },
+                            { en: '3. <span class="highlight-text">Knowledge</span> (development, application, and dissemination).', ar: '3. <span class="highlight-text">المعرفة</span> (التطوير والتطبيق والنشر).' },
+                            { en: '4. <span class="highlight-text">Technology</span>.', ar: '4. <span class="highlight-text">التكنولوجيا</span>.' },
+                            { en: '5. <span class="highlight-text">Processes</span>.', ar: '5. <span class="highlight-text">العمليات</span>.' },
+                            { en: '6. <span class="highlight-text">People</span>.', ar: '6. <span class="highlight-text">الأشخاص</span>.' },
+                            { en: '7. <span class="highlight-text">Policy</span>.', ar: '7. <span class="highlight-text">السياسات</span>.' },
+                            { en: '8. <span class="highlight-text">Communication</span>.', ar: '8. <span class="highlight-text">التواصل</span>.' },
+                            { en: '9. <span class="highlight-text">Education and Training</span>.', ar: '9. <span class="highlight-text">التعليم والتدريب</span>.' }
+                        ], 'عناصر معلوماتية التمريض:'),
+                        card('Importance of Nursing Informatics · أهمية معلوماتية التمريض', [
+                            { en: '1. <span class="highlight-text">Enhancing patient care</span> (improved accuracy, personalized care, continuity of care).', ar: '1. <span class="highlight-text">تعزيز رعاية المرضى</span> (دقة محسنة، رعاية شخصية، استمرارية الرعاية).' },
+                            { en: '2. <span class="highlight-text">Supporting clinical decision-making</span>.', ar: '2. <span class="highlight-text">دعم اتخاذ القرارات السريرية</span>.' },
+                            { en: '3. <span class="highlight-text">Improving efficiency and productivity</span>.', ar: '3. <span class="highlight-text">تحسين الكفاءة والإنتاجية</span>.' },
+                            { en: '4. <span class="highlight-text">Facilitating communication and collaboration</span>.', ar: '4. <span class="highlight-text">تسهيل التواصل والتعاون</span>.' },
+                            { en: '5. <span class="highlight-text">Ensuring data security and compliance</span>.', ar: '5. <span class="highlight-text">ضمان أمن البيانات والامتثال</span>.' },
+                            { en: '6. <span class="highlight-text">Driving innovation</span> in healthcare.', ar: '6. <span class="highlight-text">قيادة الابتكار</span> في الرعاية الصحية.' },
+                            { en: '7. <span class="highlight-text">Supporting education and professional development</span>.', ar: '7. <span class="highlight-text">دعم التعليم والتطوير المهني</span>.' },
+                            { en: '8. <span class="highlight-text">Supporting research and quality improvement</span>.', ar: '8. <span class="highlight-text">دعم البحث وتحسين الجودة</span>.' }
+                        ], 'أهمية معلوماتية التمريض:')
+                    ]
+                }
+            ]
+        };
+
+        const lecture2Data = {
+            titleEn: 'Lecture 2',
+            titleAr: 'المحاضرة الثانية',
+            slides: [
+                {
+                    title: 'Introduction & Definitions · المقدمة والتعريفات',
+                    cards: [
+                        card('Information Technology · تكنولوجيا المعلومات', [
+                            { en: 'Focuses on <span class="highlight-text">developing, designing, and implementing</span> systems and technology tools for working with information.', ar: 'يركز على <span class="highlight-text">تطوير وتصميم وتنفيذ</span> الأنظمة والأدوات التكنولوجية للتعامل مع المعلومات.' },
+                            { en: 'The focus is on the <span class="highlight-text">development of systems and technology</span>.', ar: 'التركيز على <span class="highlight-text">تطوير الأنظمة والتكنولوجيا</span>.' }
+                        ], 'تكنولوجيا المعلومات:'),
+                        card('Informatics · المعلوماتية', [
+                            { en: 'Concerned with the <span class="highlight-text">development, design, and usability</span> of information systems and technology tools.', ar: 'يهتم بـ<span class="highlight-text">تطوير وتصميم وقابلية استخدام</span> أنظمة المعلومات والأدوات التكنولوجية.' },
+                            { en: 'Aims to enable the <span class="highlight-text">adoption, application, or transformation</span> of a process (e.g., healthcare, biotechnology).', ar: 'يهدف إلى تمكين <span class="highlight-text">تبني أو تطبيق أو تحويل</span> عملية ما (مثل الرعاية الصحية والتكنولوجيا الحيوية).' }
+                        ], 'المعلوماتية:'),
+                        card('Health Informatics (HI) · المعلوماتية الصحية', [
+                            { en: 'A field that includes <span class="highlight-text">technology and software systems</span>.', ar: 'مجال يشمل <span class="highlight-text">أنظمة التكنولوجيا والبرمجيات</span>.' },
+                            { en: 'Merges <span class="highlight-text">management and analysis of patient records</span> with how healthcare professionals and clinicians use health data to monitor, diagnose, and treat patients.', ar: 'يدمج <span class="highlight-text">إدارة وتحليل سجلات المرضى</span> مع كيفية استخدام متخصصي الرعاية الصحية والأطباء للبيانات الصحية للمراقبة والتشخيص والعلاج.' }
+                        ], 'المعلوماتية الصحية:'),
+                        card('Ethics in Health Informatics · الأخلاقيات في المعلوماتية الصحية', [
+                            { en: 'Ethical ramifications in public health regarding how information technology is used are critical to maintaining the <span class="highlight-text">integrity of data collection</span> within the healthcare system.', ar: 'التبعات الأخلاقية في الصحة العامة فيما يتعلق بكيفية استخدام تكنولوجيا المعلومات حاسمة للحفاظ على <span class="highlight-text">نزاهة جمع البيانات</span> داخل نظام الرعاية الصحية.' },
+                            { en: 'Some universities have developed coursework that includes specific <span class="highlight-text">ethical and legal issues</span> in the health informatics profession.', ar: 'طورت بعض الجامعات مقررات دراسية تتضمن <span class="highlight-text">قضايا أخلاقية وقانونية</span> محددة في مهنة المعلوماتية الصحية.' }
+                        ], 'الأخلاقيات في المعلوماتية الصحية:'),
+                        card('Code of Ethics · مدونة الأخلاقيات', [
+                            { en: 'The Ethics and Compliance Initiative outlines why a <span class="highlight-text">code of ethics</span> is critical in any organization; the same ideas apply to an entire field or industry.', ar: 'توضح مبادرة الأخلاقيات والامتثال سبب أهمية <span class="highlight-text">مدونة الأخلاقيات</span> في أي منظمة؛ وتنطبق نفس الأفكار على مجال أو صناعة بأكملها.' },
+                            { en: 'The <span class="highlight-text">International Medical Informatics Association (IMIA)</span> has created specific sets of principles for the field of health informatics.', ar: 'أنشأت <span class="highlight-text">الجمعية الدولية للمعلوماتية الطبية (IMIA)</span> مجموعات محددة من المبادئ لمجال المعلوماتية الصحية.' }
+                        ], 'مدونة الأخلاقيات:')
+                    ]
+                },
+                {
+                    title: 'Key Principles of Nursing Informatics · المبادئ الأساسية لمعلوماتية التمريض',
+                    cards: [
+                        card('Data Management · إدارة البيانات', [
+                            { en: 'This involves the systematic <span class="highlight-text">organization, storage, and retrieval</span> of health information.', ar: 'يتضمن <span class="highlight-text">التنظيم المنهجي والتخزين والاسترجاع</span> للمعلومات الصحية.' }
+                        ], 'إدارة البيانات:'),
+                        card('Improved Patient Outcomes · تحسين نتائج المرضى', [
+                            { en: 'Effective use of informatics assists in enhancing <span class="highlight-text">patient care decisions</span>, leading to better outcomes.', ar: 'يساعد الاستخدام الفعال للمعلوماتية في تعزيز <span class="highlight-text">قرارات رعاية المرضى</span>، مما يؤدي إلى نتائج أفضل.' }
+                        ], 'تحسين نتائج المرضى:'),
+                        card('Interdisciplinary Communication · التواصل متعدد التخصصات', [
+                            { en: 'Promotes <span class="highlight-text">seamless collaboration</span> between different healthcare providers.', ar: 'يعزز <span class="highlight-text">التعاون السلس</span> بين مختلف مقدمي الرعاية الصحية.' }
+                        ], 'التواصل متعدد التخصصات:')
+                    ]
+                },
+                {
+                    title: 'Fundamental Ethical Principles · المبادئ الأخلاقية الأساسية',
+                    cards: [
+                        card('1. Principle of Autonomy · مبدأ الاستقلالية', [
+                            { en: 'All persons have a fundamental right to <span class="highlight-text">self-determination</span>.', ar: 'لجميع الأشخاص حق أساسي في <span class="highlight-text">تقرير المصير</span>.' }
+                        ], 'مبدأ الاستقلالية:'),
+                        card('2. Principle of Equality and Justice · مبدأ المساواة والعدالة', [
+                            { en: 'All persons are <span class="highlight-text">equal</span> as persons and have a right to be treated accordingly.', ar: 'جميع الأشخاص <span class="highlight-text">متساوون</span> كأشخاص ولهم الحق في أن يُعاملوا وفقاً لذلك.' }
+                        ], 'مبدأ المساواة والعدالة:'),
+                        card('3. Principle of Beneficence · مبدأ الإحسان', [
+                            { en: 'All persons have a duty to <span class="highlight-text">advance the good of others</span> where the nature of this good is in keeping with the <span class="highlight-text">fundamental and ethically defensible values</span> of the affected party.', ar: 'على جميع الأشخاص واجب <span class="highlight-text">تعزيز خير الآخرين</span> حيث تكون طبيعة هذا الخير متوافقة مع <span class="highlight-text">القيم الأساسية والمبررة أخلاقياً</span> للطرف المتأثر.' }
+                        ], 'مبدأ الإحسان:'),
+                        card('4. Principle of Non-Malfeasance · مبدأ عدم الإضرار', [
+                            { en: 'All persons have a duty to <span class="highlight-text">prevent harm</span> to other persons in so far as it lies within their power to do so without undue harm to themselves.', ar: 'على جميع الأشخاص واجب <span class="highlight-text">منع الضرر</span> عن الآخرين بقدر ما هو في وسعهم دون ضرر لا مبرر له على أنفسهم.' }
+                        ], 'مبدأ عدم الإضرار:'),
+                        card('5. Principle of Impossibility · مبدأ الاستحالة', [
+                            { en: 'All rights and duties hold subject to the condition that it is <span class="highlight-text">possible to meet them</span> under the circumstances that obtain.', ar: 'جميع الحقوق والواجبات مشروطة بـ<span class="highlight-text">إمكانية الوفاء بها</span> في ظل الظروف القائمة.' }
+                        ], 'مبدأ الاستحالة:'),
+                        card('6. Principle of Integrity · مبدأ النزاهة', [
+                            { en: 'Whoever has an obligation has a duty to fulfill that obligation <span class="highlight-text">to the best of their ability</span>.', ar: 'من لديه التزام فعليه الوفاء به <span class="highlight-text">بأفضل ما لديه من قدرة</span>.' }
+                        ], 'مبدأ النزاهة:')
+                    ]
+                },
+                {
+                    title: 'General Principles of Informatics Ethics (1-5) · المبادئ العامة لأخلاقيات المعلوماتية',
+                    cards: [
+                        card('1. Principle of Information-Privacy and Disposition · مبدأ خصوصية المعلومات والتصرف فيها', [
+                            { en: 'All persons and groups of persons have a fundamental right to <span class="highlight-text">privacy</span>, and hence to control over the collection, storage, access, use, communication, manipulation, linkage and disposition of data about themselves.', ar: 'لجميع الأشخاص والجماعات حق أساسي في <span class="highlight-text">الخصوصية</span>، وبالتالي التحكم في جمع وتخزين والوصول واستخدام ونقل ومعالجة وربط والتصرف في البيانات المتعلقة بهم.' }
+                        ], 'مبدأ خصوصية المعلومات والتصرف فيها:'),
+                        card('2. Principle of Openness · مبدأ الانفتاح', [
+                            { en: 'The collection, storage, access, use, communication, manipulation, linkage and disposition of personal data must be <span class="highlight-text">disclosed</span> in an appropriate and timely fashion to the subject or subjects of those data.', ar: 'يجب <span class="highlight-text">الإفصاح</span> عن جمع وتخزين والوصول واستخدام ونقل ومعالجة وربط والتصرف في البيانات الشخصية بطريقة مناسبة وفي الوقت المناسب للأشخاص المعنيين بتلك البيانات.' }
+                        ], 'مبدأ الانفتاح:'),
+                        card('3. Principle of Security · مبدأ الأمان', [
+                            { en: 'Data that have been legitimately collected about persons or groups should be protected by all reasonable and appropriate measures against <span class="highlight-text">loss, degradation, unauthorized destruction, access, use, manipulation, linkage, modification or communication</span>.', ar: 'يجب حماية البيانات التي تم جمعها بشكل مشروع عن الأشخاص أو الجماعات بجميع التدابير المعقولة والمناسبة ضد <span class="highlight-text">الفقدان والتدهور والتدمير غير المصرح به والوصول والاستخدام والمعالجة والربط والتعديل أو النقل</span>.' }
+                        ], 'مبدأ الأمان:'),
+                        card('4. Principle of Access · مبدأ الوصول', [
+                            { en: 'The subjects of electronic health records have the right of <span class="highlight-text">access to those records</span> and the right to <span class="highlight-text">correct them</span> with respect to its accurateness and completeness.', ar: 'لأصحاب السجلات الصحية الإلكترونية الحق في <span class="highlight-text">الوصول إلى تلك السجلات</span> والحق في <span class="highlight-text">تصحيحها</span> فيما يتعلق بدقتها واكتمالها.' }
+                        ], 'مبدأ الوصول:'),
+                        card('5. Principle of Legitimate Infringement · مبدأ الانتهاك المشروع', [
+                            { en: 'The fundamental right of privacy and of control over the collection, storage, access, use, manipulation, linkage, communication and disposition of personal data is conditioned only by the <span class="highlight-text">legitimate, appropriate and relevant data-needs</span> of a free, responsible and democratic society, and by the equal and competing rights of others.', ar: 'الحق الأساسي في الخصوصية والتحكم في جمع وتخزين والوصول واستخدام ومعالجة وربط ونقل والتصرف في البيانات الشخصية مشروط فقط بـ<span class="highlight-text">احتياجات البيانات المشروعة والمناسبة وذات الصلة</span> لمجتمع حر ومسؤول وديمقراطي، وبالحقوق المتساوية والمتنافسة للآخرين.' }
+                        ], 'مبدأ الانتهاك المشروع:')
+                    ]
+                },
+                {
+                    title: 'General Principles of Informatics Ethics (6-7) · المبادئ العامة لأخلاقيات المعلوماتية',
+                    cards: [
+                        card('6. Principle of the Least Intrusive Alternative · مبدأ البديل الأقل تدخلاً', [
+                            { en: 'Any infringement of the privacy rights of a person or group of persons, and of their right of control over data about them, may only occur in the <span class="highlight-text">least intrusive fashion</span> and with a minimum of interference with the rights of the affected parties.', ar: 'لا يجوز أن يحدث أي انتهاك لحقوق الخصوصية لشخص أو مجموعة أشخاص، وحقهم في التحكم في البيانات المتعلقة بهم، إلا <span class="highlight-text">بالطريقة الأقل تدخلاً</span> وبأقل قدر من التدخل في حقوق الأطراف المتأثرة.' }
+                        ], 'مبدأ البديل الأقل تدخلاً:'),
+                        card('7. Principle of Accountability · مبدأ المساءلة', [
+                            { en: 'Any infringement of the privacy rights of a person or group of persons, and of the right to control over data about them, must be <span class="highlight-text">justified</span> to the latter in good time and in an appropriate fashion.', ar: 'يجب <span class="highlight-text">تبرير</span> أي انتهاك لحقوق الخصوصية لشخص أو مجموعة أشخاص، وحقهم في التحكم في البيانات المتعلقة بهم، للأطراف المعنية في الوقت المناسب وبطريقة مناسبة.' }
+                        ], 'مبدأ المساءلة:')
+                    ]
+                }
+            ]
+        };
+
+        const lecture3Data = {
+            titleEn: 'Lecture 3',
+            titleAr: 'المحاضرة الثالثة',
+            slides: [
+                {
+                    title: 'Introduction & Components · المقدمة والمكونات',
+                    cards: [
+                        card('Aim of Nursing Informatics · هدف معلوماتية التمريض', [
+                            { en: 'Integrates nursing science with information management and analytical sciences to manage <span class="highlight-text">data, information, knowledge, and wisdom</span> in nursing practice.', ar: 'يدمج علوم التمريض مع إدارة المعلومات والعلوم التحليلية لإدارة <span class="highlight-text">البيانات والمعلومات والمعرفة والحكمة</span> في ممارسة التمريض.' },
+                            { en: 'Refers to the practice and science of integrating nursing information and knowledge with technology to <span class="highlight-text">manage and integrate health information</span>.', ar: 'يشير إلى ممارسة وعلم دمج معلومات ومعرفة التمريض مع التكنولوجيا <span class="highlight-text">لإدارة ودمج المعلومات الصحية</span>.' },
+                            { en: 'The goal is to <span class="highlight-text">improve the health of people and communities</span> while reducing costs.', ar: 'الهدف هو <span class="highlight-text">تحسين صحة الناس والمجتمعات</span> مع تقليل التكاليف.' }
+                        ], 'هدف معلوماتية التمريض:'),
+                        card('The Three Components · المكونات الثلاثة', [
+                            { en: '1. <span class="highlight-text">Nursing science</span>.', ar: '1. <span class="highlight-text">علوم التمريض</span>.' },
+                            { en: '2. <span class="highlight-text">Computer science</span>.', ar: '2. <span class="highlight-text">علوم الحاسوب</span>.' },
+                            { en: '3. <span class="highlight-text">Information science</span>.', ar: '3. <span class="highlight-text">علوم المعلومات</span>.' },
+                            { en: 'The <span class="highlight-text">integration of these three components</span> forms nursing informatics.', ar: '<span class="highlight-text">دمج هذه المكونات الثلاثة</span> يشكل معلوماتية التمريض.' }
+                        ], 'المكونات الثلاثة:')
+                    ]
+                },
+                {
+                    title: 'Definitions of Components · تعريفات المكونات',
+                    cards: [
+                        card('1. Nursing Science · علوم التمريض', [
+                            { en: 'A branch of science that deals with the <span class="highlight-text">principles and applications of nursing</span> and related services.', ar: 'فرع من العلوم يتعامل مع <span class="highlight-text">مبادئ وتطبيقات التمريض</span> والخدمات ذات الصلة.' },
+                            { en: 'Forms the <span class="highlight-text">scientific basis</span> for professional nursing practice.', ar: 'يشكل <span class="highlight-text">الأساس العلمي</span> لممارسة التمريض المهنية.' }
+                        ], 'علوم التمريض:'),
+                        card('2. Information Science · علوم المعلومات', [
+                            { en: 'Also known as information studies; an academic field primarily concerned with <span class="highlight-text">analysis, collection, classification, manipulation, storage, retrieval, movement, dissemination, and protection of information</span>.', ar: 'تُعرف أيضاً بدراسات المعلومات؛ مجال أكاديمي يهتم بشكل أساسي بـ<span class="highlight-text">تحليل وجمع وتصنيف ومعالجة وتخزين واسترجاع ونقل ونشر وحماية المعلومات</span>.' }
+                        ], 'علوم المعلومات:'),
+                        card('3. Computer Science · علوم الحاسوب', [
+                            { en: 'The study of <span class="highlight-text">computation, automation, and information</span>.', ar: 'دراسة <span class="highlight-text">الحوسبة والأتمتة والمعلومات</span>.' }
+                        ], 'علوم الحاسوب:')
+                    ]
+                },
+                {
+                    title: 'Applications in Healthcare (1-5) · التطبيقات في الرعاية الصحية',
+                    cards: [
+                        card('1. Data Management · إدارة البيانات', [
+                            { en: 'Collecting, storing, and retrieving nursing data.', ar: 'جمع وتخزين واسترجاع بيانات التمريض.' },
+                            { en: 'Ensuring data <span class="highlight-text">accuracy and accessibility</span>.', ar: 'ضمان <span class="highlight-text">دقة وإمكانية الوصول</span> للبيانات.' },
+                            { en: 'Using data to enhance patient care.', ar: 'استخدام البيانات لتعزيز رعاية المرضى.' }
+                        ], 'إدارة البيانات:'),
+                        card('2. Health Information Systems · أنظمة المعلومات الصحية', [
+                            { en: 'Utilizing <span class="highlight-text">Electronic Health Records (EHR)</span> and <span class="highlight-text">Clinical Decision Support Systems (CDSS)</span>.', ar: 'استخدام <span class="highlight-text">السجلات الصحية الإلكترونية (EHR)</span> و<span class="highlight-text">أنظمة دعم القرار السريري (CDSS)</span>.' },
+                            { en: 'Supporting nursing practice and improving patient outcomes with these systems.', ar: 'دعم ممارسة التمريض وتحسين نتائج المرضى بهذه الأنظمة.' },
+                            { en: 'Challenges in implementing health information systems.', ar: 'التحديات في تنفيذ أنظمة المعلومات الصحية.' }
+                        ], 'أنظمة المعلومات الصحية:'),
+                        card('3. Health Information Technology (HIT) · تكنولوجيا المعلومات الصحية', [
+                            { en: 'Implementing and managing technology solutions like <span class="highlight-text">telehealth, mobile health applications, and wearable health devices</span>.', ar: 'تنفيذ وإدارة الحلول التكنولوجية مثل <span class="highlight-text">الصحة عن بُعد وتطبيقات الصحة المحمولة والأجهزة الصحية القابلة للارتداء</span>.' },
+                            { en: 'Enhancing patient engagement through technology.', ar: 'تعزيز مشاركة المرضى من خلال التكنولوجيا.' },
+                            { en: 'Practical examples: <span class="highlight-text">EHR, Barcode Medication Administration, and Remote Patient Monitoring</span>.', ar: 'أمثلة عملية: <span class="highlight-text">EHR، وإعطاء الأدوية بالباركود، والمراقبة عن بُعد للمرضى</span>.' }
+                        ], 'تكنولوجيا المعلومات الصحية:'),
+                        card('4. Data Analytics · تحليل البيانات', [
+                            { en: 'Applying <span class="highlight-text">statistical and computational techniques</span> to analyze healthcare data.', ar: 'تطبيق <span class="highlight-text">التقنيات الإحصائية والحسابية</span> لتحليل بيانات الرعاية الصحية.' },
+                            { en: 'Improving patient outcomes, operational efficiency, and <span class="highlight-text">evidence-based practice</span> through analytics.', ar: 'تحسين نتائج المرضى والكفاءة التشغيلية و<span class="highlight-text">الممارسة القائمة على الأدلة</span> من خلال التحليلات.' },
+                            { en: 'Data analysis tools used in nursing.', ar: 'أدوات تحليل البيانات المستخدمة في التمريض.' }
+                        ], 'تحليل البيانات:'),
+                        card('5. Standards and Interoperability · المعايير والتوافقية', [
+                            { en: 'Complying with <span class="highlight-text">healthcare standards</span>.', ar: 'الامتثال <span class="highlight-text">لمعايير الرعاية الصحية</span>.' },
+                            { en: 'Promoting <span class="highlight-text">interoperability</span> between different healthcare systems.', ar: 'تعزيز <span class="highlight-text">التوافقية</span> بين أنظمة الرعاية الصحية المختلفة.' },
+                            { en: 'The importance of standards in <span class="highlight-text">data exchange and communication</span>.', ar: 'أهمية المعايير في <span class="highlight-text">تبادل البيانات والتواصل</span>.' }
+                        ], 'المعايير والتوافقية:')
+                    ]
+                },
+                {
+                    title: 'Applications in Healthcare (6-10) · التطبيقات في الرعاية الصحية',
+                    cards: [
+                        card('6. Clinical Workflow Optimization · تحسين سير العمل السريري', [
+                            { en: 'Assessing and redesigning clinical workflows and processes to <span class="highlight-text">enhance efficiency and effectiveness</span>.', ar: 'تقييم وإعادة تصميم سير العمل والعمليات السريرية <span class="highlight-text">لتعزيز الكفاءة والفعالية</span>.' },
+                            { en: 'Using informatics tools to <span class="highlight-text">optimize workflows</span>.', ar: 'استخدام أدوات المعلوماتية <span class="highlight-text">لتحسين سير العمل</span>.' }
+                        ], 'تحسين سير العمل السريري:'),
+                        card('7. Education and Training · التعليم والتدريب', [
+                            { en: 'Educating nursing staff on using <span class="highlight-text">informatics tools and technologies</span>.', ar: 'تعليم طاقم التمريض استخدام <span class="highlight-text">أدوات وتقنيات المعلوماتية</span>.' },
+                            { en: 'Providing ongoing training to ensure <span class="highlight-text">proficiency and compliance</span> with best practices.', ar: 'تقديم تدريب مستمر لضمان <span class="highlight-text">الكفاءة والامتثال</span> لأفضل الممارسات.' },
+                            { en: 'Resources available for education and training in nursing informatics.', ar: 'الموارد المتاحة للتعليم والتدريب في معلوماتية التمريض.' }
+                        ], 'التعليم والتدريب:'),
+                        card('8. Patient Care Technologies · تقنيات رعاية المرضى', [
+                            { en: 'Utilizing technologies such as <span class="highlight-text">electronic monitoring systems, smart pumps, and smart beds</span>.', ar: 'استخدام تقنيات مثل <span class="highlight-text">أنظمة المراقبة الإلكترونية والمضخات الذكية والأسرّة الذكية</span>.' },
+                            { en: 'How these technologies support patient care and <span class="highlight-text">improve safety</span>.', ar: 'كيف تدعم هذه التقنيات رعاية المرضى و<span class="highlight-text">تحسن السلامة</span>.' },
+                            { en: 'Recent studies on the impact of technology on patient care.', ar: 'دراسات حديثة حول تأثير التكنولوجيا على رعاية المرضى.' }
+                        ], 'تقنيات رعاية المرضى:'),
+                        card('9. Ethical and Legal Considerations · الاعتبارات الأخلاقية والقانونية', [
+                            { en: 'Addressing ethical and legal issues related to <span class="highlight-text">data privacy and security</span>.', ar: 'معالجة القضايا الأخلاقية والقانونية المتعلقة بـ<span class="highlight-text">خصوصية البيانات وأمنها</span>.' },
+                            { en: 'Using health information technology in nursing practice (e.g., <span class="highlight-text">EHR, Telehealth & Tele-nursing, Remote Patient Monitoring</span>).', ar: 'استخدام تكنولوجيا المعلومات الصحية في ممارسة التمريض (مثل <span class="highlight-text">EHR، والصحة عن بُعد والتمريض عن بُعد، والمراقبة عن بُعد للمرضى</span>).' },
+                            { en: 'Challenges and legal solutions in nursing informatics.', ar: 'التحديات والحلول القانونية في معلوماتية التمريض.' }
+                        ], 'الاعتبارات الأخلاقية والقانونية:'),
+                        card('10. Research and Evidence-Based Practice · البحث والممارسة القائمة على الأدلة', [
+                            { en: 'Supporting nursing research through informatics.', ar: 'دعم البحث التمريضي من خلال المعلوماتية.' },
+                            { en: 'Facilitating <span class="highlight-text">evidence-based practice</span>.', ar: 'تسهيل <span class="highlight-text">الممارسة القائمة على الأدلة</span>.' },
+                            { en: 'Contributing <span class="highlight-text">new knowledge</span> in nursing through informatics.', ar: 'المساهمة بـ<span class="highlight-text">معرفة جديدة</span> في التمريض من خلال المعلوماتية.' }
+                        ], 'البحث والممارسة القائمة على الأدلة:')
+                    ]
+                },
+                {
+                    title: 'Key Technical Safeguards · التدابير التقنية الرئيسية',
+                    cards: [
+                        card('Key Technical Safeguards for Patient Information Security · تدابير الحماية التقنية الرئيسية لأمن معلومات المريض', [
+                            { en: 'Multiple areas of focus are the target for healthcare providers when addressing concerns about patient information security; the first is the <span class="highlight-text">system itself</span>.', ar: 'هناك مجالات تركيز متعددة تستهدفها مقدمي الرعاية الصحية عند معالجة المخاوف المتعلقة بأمن معلومات المريض؛ الأول هو <span class="highlight-text">النظام نفسه</span>.' },
+                            { en: 'Several ways exist for handling <span class="highlight-text">potential security vulnerabilities</span> within a system that has protected health information (PHI):', ar: 'توجد عدة طرق للتعامل مع <span class="highlight-text">نقاط الضعف الأمنية المحتملة</span> داخل نظام يحتوي على معلومات صحية محمية (PHI):' }
+                        ], 'تدابير الحماية التقنية:'),
+                        card('Control Access · التحكم في الوصول', [
+                            { en: 'Control access to the system through <span class="highlight-text">unique and frequently updated login information</span>, automatic log off after a period of inactivity, and identity verification.', ar: 'التحكم في الوصول إلى النظام من خلال <span class="highlight-text">معلومات تسجيل دخول فريدة ومحدثة بشكل متكرر</span>، وتسجيل الخروج التلقائي بعد فترة من عدم النشاط، والتحقق من الهوية.' }
+                        ], 'التحكم في الوصول:'),
+                        card('Put Audits in Place · وضع عمليات التدقيق', [
+                            { en: 'Put audits in place so logins and activity in the system can be <span class="highlight-text">monitored or reviewed</span>.', ar: 'وضع عمليات التدقيق بحيث يمكن <span class="highlight-text">مراقبة أو مراجعة</span> عمليات تسجيل الدخول والنشاط في النظام.' }
+                        ], 'وضع عمليات التدقيق:'),
+                        card('Protect Information Integrity · حماية تكامل المعلومات', [
+                            { en: 'Protect information integrity, so that data cannot be altered <span class="highlight-text">without proper verification</span>.', ar: 'حماية تكامل المعلومات، بحيث لا يمكن تعديل البيانات <span class="highlight-text">دون التحقق المناسب</span>.' }
+                        ], 'حماية تكامل المعلومات:'),
+                        card('Encrypt Information · تشفير المعلومات', [
+                            { en: 'Encrypt information so data cannot be accessed while <span class="highlight-text">being transmitted between authorized users or systems</span>.', ar: 'تشفير المعلومات بحيث لا يمكن الوصول إلى البيانات <span class="highlight-text">أثناء نقلها بين المستخدمين أو الأنظمة المصرح لهم</span>.' }
+                        ], 'تشفير المعلومات:')
+                    ]
+                },
+                {
+                    title: 'Guidelines & Strategies to Minimize Risk · إرشادات واستراتيجيات لتقليل المخاطر',
+                    cards: [
+                        card('Guidelines and Strategies to Minimize Risk · إرشادات واستراتيجيات لتقليل المخاطر', [
+                            { en: '1. Never give out your <span class="highlight-text">computer password</span>.', ar: '1. لا تعطِ أبداً <span class="highlight-text">كلمة مرور الحاسوب</span> الخاصة بك.' },
+                            { en: '2. Always <span class="highlight-text">log off</span> when you leave a computer terminal.', ar: '2. قم دائماً <span class="highlight-text">بتسجيل الخروج</span> عند مغادرة محطة الحاسوب.' },
+                            { en: '3. Follow procedures for <span class="highlight-text">correcting mistakes</span> because computer entries are permanent.', ar: '3. اتبع إجراءات <span class="highlight-text">تصحيح الأخطاء</span> لأن إدخالات الحاسوب دائمة.' },
+                            { en: '4. Do not leave patient information displayed on a screen; <span class="highlight-text">keep track of printed information and dispose of it properly</span>.', ar: '4. لا تترك معلومات المريض معروضة على الشاشة؛ <span class="highlight-text">تتبع المعلومات المطبوعة وتخلص منها بشكل صحيح</span>.' },
+                            { en: '5. Follow your institution\'s <span class="highlight-text">confidentiality policies and procedures</span>.', ar: '5. اتبع <span class="highlight-text">سياسات وإجراءات السرية</span> الخاصة بمؤسستك.' }
+                        ], 'إرشادات لتقليل المخاطر:')
+                    ]
+                }
+            ]
+        };
+
+        const lecture4Data = {
+            titleEn: 'Lecture 4',
+            titleAr: 'المحاضرة الرابعة',
+            slides: [
+                {
+                    title: 'Informatics in Nursing Education · المعلوماتية في تعليم التمريض',
+                    cards: [
+                        card('Introduction · المقدمة', [
+                            { en: 'Technology has become more popular as a medium for teaching and is imperative to today’s learning environment.', ar: 'أصبحت التكنولوجيا أكثر شيوعاً كوسيط للتعليم وأصبحت ضرورية لبيئة التعلم اليوم.' },
+                            { en: 'Numerous modes of technology are used in nursing education; high- and low-fidelity simulation provides students with <span class="highlight-text">case-based scenarios</span> and the opportunity to practice hands-on skills.', ar: 'تُستخدم أنماط عديدة من التكنولوجيا في تعليم التمريض؛ وتوفر المحاكاة عالية ومنخفضة الدقة للطلاب <span class="highlight-text">سيناريوهات قائمة على الحالات</span> وفرصة ممارسة المهارات العملية.' },
+                            { en: 'E-learning has been incorporated into many nursing programs, enabling students in remote locations to learn in a more <span class="highlight-text">cost-effective and accommodating manner</span>.', ar: 'تم دمج التعلم الإلكتروني في العديد من برامج التمريض، مما يمكّن الطلاب في المواقع النائية من التعلم بطريقة أكثر <span class="highlight-text">توفيراً وملاءمة</span>.' }
+                        ], 'المقدمة:'),
+                        card('Chapter Outlines · محتويات الفصل', [
+                            { en: '1. Delivery modalities in informatics in nursing education.', ar: '1. طرق تقديم المعلوماتية في تعليم التمريض.' },
+                            { en: '2. Face-to-face delivery, online delivery, and hybrid or blended delivery.', ar: '2. التقديم وجهاً لوجه، والتقديم عبر الإنترنت، والتقديم المختلط أو المدمج.' },
+                            { en: '3. Technology tools supporting education: tutorials, case scenarios, portfolios and e-portfolios, simulations, and virtual reality.', ar: '3. أدوات التكنولوجيا الداعمة للتعليم: الدروس التعليمية، وسيناريوهات الحالات، وملفات الإنجاز وملفات الإنجاز الإلكترونية، والمحاكاة، والواقع الافتراضي.' },
+                            { en: '4. Promoting active and collaborative learning.', ar: '4. تعزيز التعلم النشط والتعاوني.' }
+                        ], 'محتويات الفصل:')
+                    ]
+                },
+                {
+                    title: 'Delivery Modalities · طرق تقديم التعليم',
+                    cards: [
+                        card('1. Face-to-Face Delivery · التقديم وجهاً لوجه', [
+                            { en: 'Traditional face-to-face lecture yields only a <span class="highlight-text">5% information retention rate</span> over a 24-hour period.', ar: 'تنتج المحاضرة التقليدية وجهاً لوجه فقط <span class="highlight-text">معدل احتفاظ بالمعلومات 5%</span> خلال 24 ساعة.' },
+                            { en: 'This compares unfavorably with demonstration (30%), discussion groups (50%), practice activities (75%), and peer teaching (90%).', ar: 'وهذا يتقارن بشكل غير مواتٍ مع العرض العملي (30%)، ومجموعات المناقشة (50%)، وأنشطة الممارسة (75%)، وتعليم الأقران (90%).' },
+                            { en: 'The inability of physical space to keep pace with the evolution of learning models inhibits the benefits gained from <span class="highlight-text">face-to-face interaction</span> between teacher and student.', ar: 'عدم قدرة المساحة المادية على مواكبة تطور نماذج التعلم يحد من الفوائد المكتسبة من <span class="highlight-text">التفاعل وجهاً لوجه</span> بين المعلم والطالب.' }
+                        ], 'التقديم وجهاً لوجه:'),
+                        tableCard('Information Retention Rates · معدلات الاحتفاظ بالمعلومات', `<table class="info-table"><thead><tr><th>Method · الطريقة</th><th>Retention · الاحتفاظ</th></tr></thead><tbody><tr><td>${cell('Traditional lecture','محاضرة تقليدية')}</td><td>5%</td></tr><tr><td>${cell('Demonstration','عرض عملي')}</td><td>30%</td></tr><tr><td>${cell('Discussion groups','مجموعات مناقشة')}</td><td>50%</td></tr><tr><td>${cell('Practice activities','أنشطة ممارسة')}</td><td>75%</td></tr><tr><td>${cell('Peer teaching','تعليم الأقران')}</td><td>90%</td></tr></tbody></table>`, 'معدلات الاحتفاظ بالمعلومات:'),
+                        card('Role Playing & Problem-Based Learning · لعب الأدوار والتعلم القائم على المشكلات', [
+                            { en: 'Role playing allows students to try on real-life scenarios by filling either prescribed or ad-libbed roles (doctor, nurse, patient, clinician, and so forth).', ar: 'يسمح لعب الأدوار للطلاب بتجربة سيناريوهات من الحياة الواقعية من خلال أداء أدوار محددة أو مرتجلة (طبيب، ممرض، مريض، أخصائي، وغير ذلك).' },
+                            { en: 'Problem-based learning is an interactive learning form that takes assignments out of a contextual vacuum and applies <span class="highlight-text">real-life scenarios</span> to problems or challenges.', ar: 'التعلم القائم على المشكلات هو شكل تفاعلي للتعلم يُخرج التكليفات من الفراغ السياقي ويطبق <span class="highlight-text">سيناريوهات الحياة الواقعية</span> على المشكلات أو التحديات.' }
+                        ], 'لعب الأدوار والتعلم القائم على المشكلات:')
+                    ]
+                },
+                {
+                    title: 'Online Delivery · التقديم عبر الإنترنت',
+                    cards: [
+                        card('E-learning, Online Learning & Web-based Education · التعلم الإلكتروني والتعلم عبر الإنترنت والتعليم القائم على الويب', [
+                            { en: 'These approaches have caused a <span class="highlight-text">significant shift in student-teacher relationships</span> in nursing education.', ar: 'تسببت هذه الأساليب في <span class="highlight-text">تحول كبير في علاقات الطالب والمعلم</span> في تعليم التمريض.' },
+                            { en: 'Learning spaces are no longer only physical or formal, especially on campuses with wireless capabilities.', ar: 'لم تعد مساحات التعلم مادية أو رسمية فقط، خاصة في الحرم الجامعي الذي يتوفر على إمكانيات لاسلكية.' },
+                            { en: 'Nursing students expect to use a wide range of technology during their academic tenure, exchanging the traditional.', ar: 'يتوقع طلاب التمريض استخدام مجموعة واسعة من التكنولوجيا خلال فترة دراستهم، مما يغيّر الطريقة التقليدية.' }
+                        ], 'التعلم الإلكتروني:'),
+                        card('Benefits of Online Learning · فوائد التعلم عبر الإنترنت', [
+                            { en: 'Online learning allows educators to <span class="highlight-text">translate theory into practice</span>, creating a virtual classroom space that promotes collaboration, engagement, discussion, and analysis.', ar: 'يتيح التعلم عبر الإنترنت للمعلمين <span class="highlight-text">ترجمة النظرية إلى ممارسة</span>، مما ينشئ مساحة صفية افتراضية تعزز التعاون والمشاركة والمناقشة والتحليل.' },
+                            { en: 'It enhances learning in ways that encourage students to share personal experiences and support.', ar: 'يعزز التعلم بطرق تشجع الطلاب على مشاركة الخبرات الشخصية والدعم.' }
+                        ], 'فوائد التعلم عبر الإنترنت:')
+                    ]
+                },
+                {
+                    title: 'Hybrid or Blended Delivery · التقديم المختلط أو المدمج',
+                    cards: [
+                        card('Distance Education · التعليم عن بُعد', [
+                            { en: 'Traditional courses are more frequently being offered as online, virtual classes (i.e., distance education).', ar: 'تُقدَّم المقررات التقليدية بشكل متكرر كصفوف افتراضية عبر الإنترنت (أي التعليم عن بُعد).' },
+                            { en: 'Distance education is learning that occurs elsewhere than in the traditional classroom and consequently requires <span class="highlight-text">special course design, planning, techniques, and communication</span>.', ar: 'التعليم عن بُعد هو التعلم الذي يحدث في مكان آخر غير الفصل التقليدي، وبالتالي يتطلب <span class="highlight-text">تصميماً خاصاً للمقرر والتخطيط والتقنيات والتواصل</span>.' }
+                        ], 'التعليم عن بُعد:'),
+                        card('Hybrid or Blended Learning · التعلم المختلط أو المدمج', [
+                            { en: 'A hybrid of this delivery mode includes learning in which <span class="highlight-text">traditional classroom time is enhanced or broken up with online components</span>.', ar: 'يشمل النمط الهجين من طريقة التقديم هذه تعلماً يتم فيه <span class="highlight-text">تعزيز وقت الفصل التقليدي أو تقسيمه بمكونات عبر الإنترنت</span>.' },
+                            { en: 'This creates a class in which <span class="highlight-text">blended hybrid learning</span> occurs.', ar: 'وهذا ينشئ فصلاً يحدث فيه <span class="highlight-text">التعلم الهجين المدمج</span>.' }
+                        ], 'التعلم المختلط أو المدمج:')
+                    ]
+                },
+                {
+                    title: 'Technology Tools Supporting Education · أدوات التكنولوجيا الداعمة للتعليم',
+                    cards: [
+                        card('Technology Tools Overview · نظرة عامة على أدوات التكنولوجيا', [
+                            { en: 'Through software, hardware, drivers, dedicated servers, plug-ins, and an Internet connection, students can <span class="highlight-text">chat, collaborate, play games, or interact electronically</span> with a peer with little to no learning curve or effort.', ar: 'من خلال البرمجيات والأجهزة وبرامج التشغيل والخوادم المخصصة والإضافات واتصال الإنترنت، يمكن للطلاب <span class="highlight-text">الدردشة والتعاون ولعب الألعاب أو التفاعل إلكترونياً</span> مع زميل بأقل قدر من منحنى التعلم أو الجهد.' },
+                            { en: 'Students and faculty are also embracing technology tools that allow for the <span class="highlight-text">creation and interpretation of visual images</span>.', ar: 'كما يتبنى الطلاب وأعضاء هيئة التدريس أدوات تكنولوجيا تسمح بـ<span class="highlight-text">إنشاء وتفسير الصور المرئية</span>.' }
+                        ], 'نظرة عامة:'),
+                        card('1. Tutorials · الدروس التعليمية', [
+                            { en: 'The modern tutorial mimics lectures by guiding users through a series of <span class="highlight-text">objectives or tasks</span>, usually allowing the user to do the work at his or her own space.', ar: 'تحاكي الدروس التعليمية الحديثة المحاضرات من خلال توجيه المستخدمين عبر سلسلة من <span class="highlight-text">الأهداف أو المهام</span>، وعادة ما تسمح للمستخدم بالعمل وفق وتيرته الخاصة.' }
+                        ], 'الدروس التعليمية:'),
+                        card('2. Case Scenarios · سيناريوهات الحالات', [
+                            { en: 'Professional organizations increasingly recommend <span class="highlight-text">performance-based assessments</span> of students in professional degree programs, and enacting case scenarios.', ar: 'توصي المنظمات المهنية بشكل متزايد بـ<span class="highlight-text">التقييمات القائمة على الأداء</span> للطلاب في برامج الدرجات المهنية، وتنفيذ سيناريوهات الحالات.' },
+                            { en: 'Case scenarios provide an opportunity for students to practice procedural responses and improve patient safety.', ar: 'توفر سيناريوهات الحالات فرصة للطلاب لممارسة الاستجابات الإجرائية وتحسين سلامة المرضى.' },
+                            { en: 'The case scenario, a form of problem-based learning, has evolved and is now available through <span class="highlight-text">simulation software and virtual reality programming</span>.', ar: 'تطورت سيناريوهات الحالات، وهي شكل من التعلم القائم على المشكلات، وأصبحت الآن متاحة من خلال <span class="highlight-text">برمجيات المحاكاة وبرمجة الواقع الافتراضي</span>.' }
+                        ], 'سيناريوهات الحالات:')
+                    ]
+                },
+                {
+                    title: 'Portfolios & E-Portfolios · ملفات الإنجاز وملفات الإنجاز الإلكترونية',
+                    cards: [
+                        card('3. Portfolios · ملفات الإنجاز', [
+                            { en: 'A portfolio allows a student to document a variety of sometimes <span class="highlight-text">unquantifiable skills</span>, such as creativity, communication, and critical thinking.', ar: 'يسمح ملف الإنجاز للطالب بتوثيق مجموعة متنوعة من <span class="highlight-text">المهارات التي قد لا يمكن قياسها</span> في بعض الأحيان، مثل الإبداع والتواصل والتفكير النقدي.' }
+                        ], 'ملفات الإنجاز:'),
+                        card('E-Portfolio · ملف الإنجاز الإلكتروني', [
+                            { en: 'An e-portfolio is a <span class="highlight-text">collection of work (evidence) in an electronic format</span> that showcases learning over time.', ar: 'ملف الإنجاز الإلكتروني هو <span class="highlight-text">مجموعة من الأعمال (الأدلة) بتنسيق إلكتروني</span> تعرض التعلم بمرور الوقت.' }
+                        ], 'ملف الإنجاز الإلكتروني:'),
+                        card('An E-Portfolio May Contain · قد يحتوي ملف الإنجاز الإلكتروني على', [
+                            { en: '1. Files of various formats (text, pictures, video, etc.).', ar: '1. ملفات بتنسيقات متنوعة (نص، صور، فيديو، إلخ).' },
+                            { en: '2. Evidence related to courses taken, programs of study, etc.', ar: '2. أدلة متعلقة بالمقررات التي تمت دراستها أو البرامج الدراسية أو غيرها.' },
+                            { en: '3. Writing samples (which might include several drafts to show development and improvement).', ar: '3. نماذج كتابية (قد تشمل عدة مسودات لإظهار التطور والتحسن).' },
+                            { en: '4. Projects prepared for class or extracurricular activities.', ar: '4. مشاريع أُعدت للصف أو الأنشطة اللاصفية.' },
+                            { en: '5. Evidence of creativity and performance.', ar: '5. أدلة على الإبداع والأداء.' },
+                            { en: '6. Evidence of extracurricular or co-curricular activities, including examples of leadership.', ar: '6. أدلة على الأنشطة اللاصفية أو المصاحبة للمنهج، بما في ذلك أمثلة على القيادة.' },
+                            { en: '7. Evaluations, analysis, and recommendations.', ar: '7. التقييمات والتحليل والتوصيات.' }
+                        ], 'قد يحتوي على:')
+                    ]
+                },
+                {
+                    title: 'Simulations · المحاكاة',
+                    cards: [
+                        card('4. Simulations · المحاكاة', [
+                            { en: 'Simulations are <span class="highlight-text">imitations of real-life events or circumstances</span>; in nursing education, simulations replicate a clinical scenario to provide an opportunity for practice in a mock situation.', ar: 'المحاكاة هي <span class="highlight-text">تقليد لأحداث أو ظروف الحياة الواقعية</span>؛ وفي تعليم التمريض، تحاكي المحاكاة سيناريو سريرياً لتوفير فرصة للممارسة في موقف محاكى.' },
+                            { en: 'A simulator is a <span class="highlight-text">mechanical or electronic device</span> that provides an environment in which a simulation can occur.', ar: 'المحاكي هو <span class="highlight-text">جهاز ميكانيكي أو إلكتروني</span> يوفر بيئة يمكن أن تحدث فيها المحاكاة.' }
+                        ], 'المحاكاة:'),
+                        card('Simulated Documentation & Scenario · التوثيق والسيناريو المحاكى', [
+                            { en: 'Simulated documentation refers to any simulated electronic format or <span class="highlight-text">electronic health record (EHR)</span> accessed and used by the learner to document simulated nursing care for educational purposes.', ar: 'يشير التوثيق المحاكى إلى أي تنسيق إلكتروني محاكى أو <span class="highlight-text">سجل صحي إلكتروني (EHR)</span> يصل إليه المتعلم ويستخدمه لتوثيق رعاية تمريضية محاكاة لأغراض تعليمية.' },
+                            { en: 'A simulation scenario is a situation or case developed in a simulation setting to <span class="highlight-text">mimic an actual practice situation</span>.', ar: 'سيناريو المحاكاة هو موقف أو حالة تُطوَّر في بيئة محاكاة <span class="highlight-text">لمحاكاة موقف ممارسة فعلي</span>.' }
+                        ], 'التوثيق والسيناريو:'),
+                        card('Game & Game Mechanics · اللعبة وميكانيكا اللعبة', [
+                            { en: 'A game is a <span class="highlight-text">structured activity undertaken for enjoyment</span>.', ar: 'اللعبة هي <span class="highlight-text">نشاط منظم يُمارس من أجل المتعة</span>.' },
+                            { en: 'Game mechanics are the rules, instructions, directions, and constructs that the learner interacts with while playing the game.', ar: 'ميكانيكا اللعبة هي القواعد والتعليمات والتوجيهات والبنى التي يتفاعل معها المتعلم أثناء لعب اللعبة.' }
+                        ], 'اللعبة وميكانيكا اللعبة:')
+                    ]
+                },
+                {
+                    title: 'Four Components of Simulation · مكونات المحاكاة الأربعة',
+                    cards: [
+                        card('1. Pre-brief · التمهيد المسبق', [
+                            { en: 'The student receives the simulation information: <span class="highlight-text">goal, educational outcomes, and related course/program outcomes</span>.', ar: 'يتلقى الطالب معلومات المحاكاة: <span class="highlight-text">الهدف والنتائج التعليمية ونتائج المقرر/البرنامج ذات الصلة</span>.' },
+                            { en: 'The simulation should be explained and focused for the student; they should know how to prepare for the activity, what is expected, and the background necessary to enact their role.', ar: 'يجب شرح المحاكاة والتركيز عليها للطالب؛ ويجب أن يعرف كيفية الاستعداد للنشاط وما هو متوقع والخلفية اللازمة لأداء دوره.' },
+                            { en: 'They must be given specifics about how they will be assessed and the <span class="highlight-text">timeframe</span> within which the simulation must be completed.', ar: 'يجب إعطاؤهم تفاصيل محددة حول كيفية تقييمهم و<span class="highlight-text">الإطار الزمني</span> الذي يجب إكمال المحاكاة خلاله.' }
+                        ], 'التمهيد المسبق:'),
+                        card('2. Enactment · التنفيذ', [
+                            { en: 'The simulation area is prepared to facilitate the activity.', ar: 'يُجهَّز مجال المحاكاة لتسهيل النشاط.' },
+                            { en: 'The student enacts the assigned role and/or completes assigned activities during the established timeframe.', ar: 'يؤدي الطالب الدور المكلف به و/أو يكمل الأنشطة المكلفة بها خلال الإطار الزمني المحدد.' }
+                        ], 'التنفيذ:'),
+                        card('3. Debrief · الاستخلاص/المراجعة', [
+                            { en: 'Debriefing is a <span class="highlight-text">student-centered discussion</span> during which participants and observers reflect on performance during the scenario and make recommendations for future practice.', ar: 'الاستخلاص هو <span class="highlight-text">مناقشة متمركزة حول الطالب</span> يعكس خلالها المشاركون والمراقبون على الأداء أثناء السيناريو ويقدمون توصيات للممارسة المستقبلية.' }
+                        ], 'الاستخلاص:'),
+                        card('4. Assessment · التقييم', [
+                            { en: 'The student should receive a detailed explanation of how they will be assessed and graded in relation to the goal, educational outcomes, and course/program outcomes.', ar: 'يجب أن يتلقى الطالب شرحاً تفصيلياً لكيفية تقييمه وتقديره فيما يتعلق بالهدف والنتائج التعليمية ونتائج المقرر/البرنامج.' },
+                            { en: 'Detailed rubrics are recommended; the assessment process must be shared during pre-briefing.', ar: 'يوصى باستخدام معايير تقييم تفصيلية؛ ويجب مشاركة عملية التقييم أثناء التمهيد المسبق.' },
+                            { en: 'If the activity is not graded, a <span class="highlight-text">self-assessment</span> should be provided so students know how to evaluate their own performance.', ar: 'إذا لم يتم تقييم النشاط، يجب توفير <span class="highlight-text">تقييم ذاتي</span> حتى يعرف الطلاب كيفية تقييم أدائهم.' }
+                        ], 'التقييم:')
+                    ]
+                },
+                {
+                    title: 'Forms of Simulation & Virtual Reality · أشكال المحاكاة والواقع الافتراضي',
+                    cards: [
+                        card('Computer-Based Simulation · المحاكاة القائمة على الحاسوب', [
+                            { en: 'Software is used to <span class="highlight-text">simulate a subject or situation</span>.', ar: 'تُستخدم البرمجيات <span class="highlight-text">لمحاكاة موضوع أو موقف</span>.' }
+                        ], 'المحاكاة القائمة على الحاسوب:'),
+                        card('Full-Scale Simulation · المحاكاة واسعة النطاق', [
+                            { en: 'All elements of a healthcare situation are recreated using <span class="highlight-text">real physiology, people, and interaction</span> to resemble an environment as closely as possible and immerse students in the experience.', ar: 'تُعاد جميع عناصر موقف الرعاية الصحية باستخدام <span class="highlight-text">فسيولوجيا حقيقية وأشخاص وتفاعل</span> لتشبه البيئة بأكبر قدر ممكن وتغمر الطلاب في التجربة.' }
+                        ], 'المحاكاة واسعة النطاق:'),
+                        card('5. Virtual Reality · الواقع الافتراضي', [
+                            { en: 'In traditional virtual reality, the user receives <span class="highlight-text">multiple sensory inputs</span>, either mediated or generated by a computer.', ar: 'في الواقع الافتراضي التقليدي، يتلقى المستخدم <span class="highlight-text">مدخلات حسية متعددة</span>، سواء بوساطة الحاسوب أو مولدة بواسطته.' },
+                            { en: 'Inputs include visual stimulation (glasses, goggles, screens), audio input (earphones, microphones, synthesizers), and touch (smells, gloves, bodysuits).', ar: 'تشمل المدخلات التحفيز البصري (نظارات، نظارات واقية، شاشات)، والمدخلات الصوتية (سماعات أذن، ميكروفونات، مُركِّبات صوت)، واللمس (روائح، قفازات، بدلات الجسم).' },
+                            { en: 'Virtual reality healthcare training was once considered science fiction technology of the future, but its use is increasing.', ar: 'كان التدريب الصحي بالواقع الافتراضي يُعتبر ذات يوم تكنولوجيا خيال علمي من المستقبل، لكن استخدامه يتزايد.' }
+                        ], 'الواقع الافتراضي:')
+                    ]
+                },
+                {
+                    title: 'Promoting Active and Collaborative Learning · تعزيز التعلم النشط والتعاوني',
+                    cards: [
+                        card('Shift in Teaching-Learning Context · التحول في سياق التعليم والتعلم', [
+                            { en: 'There is a shift from the <span class="highlight-text">individual seeking answers</span> to the <span class="highlight-text">group trying to construct new knowledge</span> from available information.', ar: 'هناك تحول من <span class="highlight-text">الفرد الذي يبحث عن إجابات</span> إلى <span class="highlight-text">المجموعة التي تحاول بناء معرفة جديدة</span> من المعلومات المتاحة.' },
+                            { en: 'The most effective learning solutions require new digital communication skills, new pedagogies, and new practices.', ar: 'تتطلب حلول التعلم الأكثر فعالية مهارات تواصل رقمي جديدة وطرق تدريس جديدة وممارسات جديدة.' }
+                        ], 'التحول في السياق:'),
+                        card('Elements for Successful Collaborative Learning (1-2) · عناصر التعلم التعاوني الناجح', [
+                            { en: '1. <span class="highlight-text">Face-to-face interaction</span> between students, allowing them to build on one another’s strengths.', ar: '1. <span class="highlight-text">التفاعل وجهاً لوجه</span> بين الطلاب، مما يسمح لهم بالبناء على نقاط قوة بعضهم البعض.' },
+                            { en: '2. <span class="highlight-text">Mutual learning goals</span> that prompt students to exhibit positive interdependence rather than individualized competition.', ar: '2. <span class="highlight-text">أهداف تعلم متبادلة</span> تدفع الطلاب إلى إظهار الاعتماد الإيجابي المتبادل بدلاً من المنافسة الفردية.' }
+                        ], 'عناصر التعلم التعاوني (1-2):'),
+                        card('Elements for Successful Collaborative Learning (3-5) · عناصر التعلم التعاوني الناجح', [
+                            { en: '3. <span class="highlight-text">Equal participation</span> in the work process and personal accountability for the work one contributes.', ar: '3. <span class="highlight-text">مشاركة متساوية</span> في عملية العمل والمساءلة الشخصية عن العمل الذي يساهم به الفرد.' },
+                            { en: '4. <span class="highlight-text">Regular debriefing sessions</span> as a group after meetings or presentations, during which feedback is shared and observations analyzed.', ar: '4. <span class="highlight-text">جلسات استخلاص منتظمة</span> كمجموعة بعد الاجتماعات أو العروض التقديمية، تتم خلالها مشاركة الملاحظات وتحليل الملاحظات.' },
+                            { en: '5. Use of <span class="highlight-text">cooperative group process skills</span> learned in the classroom.', ar: '5. استخدام <span class="highlight-text">مهارات عملية المجموعة التعاونية</span> التي تم تعلمها في الفصل.' }
+                        ], 'عناصر التعلم التعاوني (3-5):')
+                    ]
+                }
+            ]
+        };
+
+        const lecture5Data = {
+            titleEn: 'Lecture 5',
+            titleAr: 'المحاضرة الخامسة',
+            slides: [
+                {
+                    title: 'Nursing Informatics Trends · اتجاهات معلوماتية التمريض',
+                    cards: [
+                        card('Outlines · المحتويات', [
+                            { en: 'Introduction.', ar: 'المقدمة.' },
+                            { en: 'Nursing Informatics trends in patient care.', ar: 'اتجاهات معلوماتية التمريض في رعاية المرضى.' },
+                            { en: 'Clinical uses of telehealth.', ar: 'الاستخدامات السريرية للصحة عن بُعد.' },
+                            { en: 'Non-clinical uses of telehealth technologies.', ar: 'الاستخدامات غير السريرية لتقنيات الصحة عن بُعد.' },
+                            { en: 'Nursing Informatics trends in education.', ar: 'اتجاهات معلوماتية التمريض في التعليم.' }
+                        ], 'المحتويات:'),
+                        card('Introduction · المقدمة', [
+                            { en: 'The <span class="highlight-text">information revolution</span> has changed the health care system to an unbelievable extent.', ar: '<span class="highlight-text">ثورة المعلومات</span> غيّرت نظام الرعاية الصحية إلى حد لا يُصدق.' },
+                            { en: 'Integration of informatics in nursing is going beyond data processing functions such as payroll, to an important role in <span class="highlight-text">patient care</span> by interpreting ECG, entering orders, reporting results, and preventing drug interactions.', ar: 'دمج المعلوماتية في التمريض يتجاوز وظائف معالجة البيانات مثل الرواتب، ليصل إلى دور مهم في <span class="highlight-text">رعاية المرضى</span> من خلال تفسير تخطيط القلب وإدخال الأوامر والإبلاغ عن النتائج ومنع التفاعلات الدوائية.' },
+                            { en: 'Nurses are using information systems in <span class="highlight-text">clinical practice, administration, research, and education</span>.', ar: 'يستخدم الممرضون أنظمة المعلومات في <span class="highlight-text">الممارسة السريرية والإدارة والبحث والتعليم</span>.' }
+                        ], 'المقدمة:')
+                    ]
+                },
+                {
+                    title: 'Nursing Informatics Trends in Patient Care · اتجاهات معلوماتية التمريض في رعاية المرضى',
+                    cards: [
+                        card('Telehealth · الصحة عن بُعد', [
+                            { en: '<span class="highlight-text">Telemedicine</span> is the use of medical information exchanged from one site to another via electronic communications to improve patients\' health status.', ar: '<span class="highlight-text">التطبيب عن بُعد</span> هو استخدام المعلومات الطبية المتبادلة من موقع إلى آخر عبر الاتصالات الإلكترونية لتحسين الحالة الصحية للمرضى.' },
+                            { en: '<span class="highlight-text">Telehealth</span> is the use of technology to deliver health care, health information, or health education at a distance.', ar: '<span class="highlight-text">الصحة عن بُعد</span> هي استخدام التكنولوجيا لتقديم الرعاية الصحية أو المعلومات الصحية أو التعليم الصحي عن بُعد.' }
+                        ], 'الصحة عن بُعد:'),
+                        card('Clinical Uses of Telehealth · الاستخدامات السريرية للصحة عن بُعد', [
+                            { en: 'Submitting images for assessment or diagnosis. For example, transmission of digital images, such as images of wounds for assessment and treatment consults.', ar: 'إرسال الصور للتقييم أو التشخيص. على سبيل المثال، نقل الصور الرقمية، مثل صور الجروح لتقييم واستشارات العلاج.' },
+                            { en: 'Transmission of clinical data for assessment, diagnosis, or disease management. For example, remote patient monitoring and transmitting patient\'s objective or subjective clinical data such as monitoring of vital signs and answers to disease management questions.', ar: 'نقل البيانات السريرية للتقييم أو التشخيص أو إدارة المرض. على سبيل المثال، المراقبة عن بُعد للمرضى ونقل البيانات السريرية الموضوعية أو الذاتية للمريض مثل مراقبة العلامات الحيوية والإجابات على أسئلة إدارة المرض.' },
+                            { en: 'Providing disease prevention and promotion of good health. Examples include case management provided via telephone or smartphone app and patient education provided through asthma.', ar: 'تقديم الوقاية من الأمراض وتعزيز الصحة الجيدة. تشمل الأمثلة إدارة الحالات المقدمة عبر الهاتف أو تطبيق الهاتف الذكي وتعليم المرضى المقدم من خلال الربو.' },
+                            { en: 'Using telephonic or video interactive technology to provide health advice in emergent cases.', ar: 'استخدام التكنولوجيا التفاعلية الهاتفية أو المرئية لتقديم المشورة الصحية في الحالات الطارئة.' },
+                            { en: 'Using real-time video. One example is exchanging health services or education live via videoconference.', ar: 'استخدام الفيديو في الوقت الفعلي. أحد الأمثلة هو تبادل الخدمات الصحية أو التعليم مباشرة عبر مؤتمرات الفيديو.' }
+                        ], 'الاستخدامات السريرية:'),
+                        card('Non-Clinical Uses of Telehealth Technologies · الاستخدامات غير السريرية لتقنيات الصحة عن بُعد', [
+                            { en: 'Distance education including continuing medical and nursing education, grand rounds, and patient education.', ar: 'التعليم عن بُعد بما في ذلك التعليم الطبي والتمريضي المستمر والجولات الكبرى وتعليم المرضى.' },
+                            { en: 'Administrative uses including meetings among telehealth networks, supervision, and presentation.', ar: 'الاستخدامات الإدارية بما في ذلك الاجتماعات بين شبكات الصحة عن بُعد والإشراف والعروض التقديمية.' },
+                            { en: 'Research using the internet and other online sources for information and health data management.', ar: 'البحث باستخدام الإنترنت والمصادر الأخرى عبر الإنترنت للمعلومات وإدارة البيانات الصحية.' }
+                        ], 'الاستخدامات غير السريرية:'),
+                        card('Telehealth Patient Population · مرضى الصحة عن بُعد', [
+                            { en: 'Patients with chronic disease.', ar: 'المرضى المصابون بأمراض مزمنة.' },
+                            { en: 'Isolated patients.', ar: 'المرضى المعزولون.' },
+                            { en: 'Emergency response situation.', ar: 'حالات الاستجابة للطوارئ.' },
+                            { en: 'Concerned patients and families.', ar: 'المرضى وعائلاتهم المعنيون.' },
+                            { en: 'Incarcerated patients.', ar: 'المرضى المسجونون.' }
+                        ], 'مرضى الصحة عن بُعد:')
+                    ]
+                },
+                {
+                    title: 'Telenursing · التمريض عن بُعد',
+                    cards: [
+                        card('Telenursing Definition · تعريف التمريض عن بُعد', [
+                            { en: '<span class="highlight-text">Telenursing</span> refers to the use of telecommunications and information technology with the aim of providing medical services in order to improve the patient-nurse relationship.', ar: 'يشير <span class="highlight-text">التمريض عن بُعد</span> إلى استخدام الاتصالات وتكنولوجيا المعلومات بهدف تقديم الخدمات الطبية لتحسين العلاقة بين المريض والممرض.' },
+                            { en: 'It is part of Telemedicine and has a lot in common with other medical applications, such as telediagnosis, teleconsulting, and telemonitoring.', ar: 'وهو جزء من التطبيب عن بُعد وله الكثير من القواسم المشتركة مع التطبيقات الطبية الأخرى، مثل التشخيص عن بُعد والاستشارات عن بُعد والمراقبة عن بُعد.' }
+                        ], 'تعريف التمريض عن بُعد:'),
+                        card('1. Improves Patient Access to Care · يحسن وصول المريض إلى الرعاية', [
+                            { en: 'Telehealth nursing improves patient access to care, including people in vulnerable populations, and those who live in rural areas where the nearest healthcare providers may be several hours away.', ar: 'يحسن التمريض عن بُعد وصول المريض إلى الرعاية، بما في ذلك الأشخاص في الفئات الضعيفة، وأولئك الذين يعيشون في المناطق الريفية حيث قد يكون أقرب مقدمي الرعاية الصحية على بعد عدة ساعات.' }
+                        ], 'يحسن الوصول:'),
+                        card('2. Saves Time and Money · يوفر الوقت والمال', [
+                            { en: 'Telehealth nursing allows patients to consult with a nurse from their home, or whatever location is most convenient for them.', ar: 'يتيح التمريض عن بُعد للمرضى التشاور مع ممرض من منزلهم، أو أي مكان أكثر ملاءمة لهم.' },
+                            { en: 'They do not have to wait weeks to schedule an in-person appointment, take time off from work, or travel long distances.', ar: 'ليس عليهم الانتظار أسابيع لتحديد موعد شخصي، أو أخذ إجازة من العمل، أو السفر لمسافات طويلة.' }
+                        ], 'يوفر الوقت والمال:'),
+                        card('3. Avoid Exposure to Illness · تجنب التعرض للمرض', [
+                            { en: 'Telehealth services have increased in 2020 because they can help patients and providers limit their exposure to COVID-19.', ar: 'زادت خدمات الصحة عن بُعد في عام 2020 لأنها يمكن أن تساعد المرضى ومقدمي الرعاية على الحد من تعرضهم لكوفيد-19.' },
+                            { en: 'Better manage chronic conditions and aftercare. Remote patient monitoring, interactive patient engagement systems, and other telehealth tools and services can also empower patients and make it easier for them to manage chronic conditions and aftercare following procedures.', ar: 'إدارة أفضل للأمراض المزمنة والرعاية اللاحقة. يمكن للمراقبة عن بُعد للمرضى وأنظمة مشاركة المرضى التفاعلية وأدوات وخدمات الصحة عن بُعد الأخرى تمكين المرضى وتسهيل إدارة الأمراض المزمنة والرعاية اللاحقة بعد الإجراءات.' }
+                        ], 'تجنب التعرض للمرض:'),
+                        card('People Who Need Telehealth · الأشخاص الذين يحتاجون إلى الصحة عن بُعد', [
+                            { en: 'Immobilized.', ar: 'غير القادرين على الحركة.' },
+                            { en: 'Living in remote or difficult-to-reach places.', ar: 'الذين يعيشون في أماكن نائية أو يصعب الوصول إليها.' },
+                            { en: 'Have chronic ailments, such as chronic obstructive pulmonary disease, diabetes, and congestive heart disease.', ar: 'لديهم أمراض مزمنة، مثل مرض الانسداد الرئوي المزمن والسكري وأمراض القلب الاحتقانية.' },
+                            { en: 'Have debilitating diseases, such as neurodegenerative diseases (Parkinson\'s disease, Alzheimer\'s disease, amyotrophic lateral sclerosis).', ar: 'لديهم أمراض منهكة، مثل الأمراض التنكسية العصبية (مرض باركنسون، مرض الزهايمر، التصلب الجانبي الضموري).' }
+                        ], 'من يحتاج الصحة عن بُعد:')
+                    ]
+                },
+                {
+                    title: 'Technology Tools Supporting Education · أدوات التكنولوجيا الداعمة للتعليم',
+                    cards: [
+                        card('1. Digital Books (eBooks) · الكتب الرقمية', [
+                            { en: 'eBooks are text documents that have been converted and published in a <span class="highlight-text">digital format</span> that displays on specialized reading devices or computers.', ar: 'الكتب الإلكترونية هي مستندات نصية تم تحويلها ونشرها بتنسيق <span class="highlight-text">رقمي</span> يتم عرضه على أجهزة قراءة متخصصة أو أجهزة كمبيوتر.' }
+                        ], 'الكتب الرقمية:'),
+                        card('Benefits of eBooks (1-4) · فوائد الكتب الإلكترونية (1-4)', [
+                            { en: '1. Study anywhere and anytime.', ar: '1. الدراسة في أي مكان وأي وقت.' },
+                            { en: '2. Offline access to eBooks.', ar: '2. الوصول دون اتصال إلى الكتب الإلكترونية.' },
+                            { en: '3. Multiple interactive features.', ar: '3. ميزات تفاعلية متعددة.' },
+                            { en: '4. Edutainment value.', ar: '4. قيمة تعليمية ترفيهية.' }
+                        ], 'فوائد الكتب الإلكترونية (1-4):'),
+                        card('Benefits of eBooks (5-8) · فوائد الكتب الإلكترونية (5-8)', [
+                            { en: '5. Experiment with augmented reality.', ar: '5. التجربة مع الواقع المعزز.' },
+                            { en: '6. Save printing costs.', ar: '6. توفير تكاليف الطباعة.' },
+                            { en: '7. Provide updated content to students.', ar: '7. توفير محتوى محدث للطلاب.' },
+                            { en: '8. Interactive assessments.', ar: '8. تقييمات تفاعلية.' }
+                        ], 'فوائد الكتب الإلكترونية (5-8):'),
+                        card('2. Webinars · الندوات عبر الويب', [
+                            { en: 'A <span class="highlight-text">webinar</span> is defined as a seminar that takes place online.', ar: 'تُعرَّف <span class="highlight-text">الندوة عبر الويب</span> بأنها ندوة تتم عبر الإنترنت.' },
+                            { en: 'Characteristics: Webinars are "few-to-many" events where one or several hosts present to and interact with up to 1000 attendees.', ar: 'الخصائص: الندوات عبر الويب هي أحداث "قليلة إلى كثيرة" حيث يقدم مضيف واحد أو عدة مضيفين ويتفاعلون مع ما يصل إلى 1000 حاضر.' },
+                            { en: 'Attendees and presenters alike can be located anywhere in the world and can connect on a desktop or mobile device.', ar: 'يمكن أن يكون الحاضرون والمقدمون في أي مكان في العالم ويمكنهم الاتصال عبر سطح المكتب أو جهاز محمول.' },
+                            { en: 'A key aspect of webinars is that they\'re <span class="highlight-text">interactive</span>. They use features like whiteboard, screen sharing, Q&A, polling, and chat – however hosts maintain full control over their audience.', ar: 'الجانب الرئيسي للندوات عبر الويب هو أنها <span class="highlight-text">تفاعلية</span>. تستخدم ميزات مثل السبورة ومشاركة الشاشة والأسئلة والأجوبة والتصويت والدردشة – ومع ذلك يحتفظ المضيفون بالسيطرة الكاملة على جمهورهم.' },
+                            { en: 'They can be recorded and turned into an <span class="highlight-text">evergreen webinar</span> for later viewing, download, and sharing online via email or a sharable link.', ar: 'يمكن تسجيلها وتحويلها إلى <span class="highlight-text">ندوة دائمة الخضرة</span> للمشاهدة لاحقاً والتنزيل والمشاركة عبر الإنترنت عبر البريد الإلكتروني أو رابط قابل للمشاركة.' }
+                        ], 'الندوات عبر الويب:'),
+                        card('Webcasts · البث عبر الويب', [
+                            { en: 'A <span class="highlight-text">webcast</span> is a web-based broadcast, or a broadcast that takes place online.', ar: '<span class="highlight-text">البث عبر الويب</span> هو بث قائم على الويب، أو بث يتم عبر الإنترنت.' },
+                            { en: 'Characteristics: Webcasts are usually "one-to-many" in that a single broadcaster reaches a large number of attendees, numbering in the 10\'s to 100\'s of thousands, with little to no interactivity.', ar: 'الخصائص: عادةً ما تكون عمليات البث عبر الويب "واحد إلى كثير" حيث يصل باث واحد إلى عدد كبير من الحاضرين، يتراوح عددهم من عشرات إلى مئات الآلاف، مع تفاعل ضئيل أو معدوم.' },
+                            { en: 'Often takes a "broadcast" format with a single stream sent out to the audience.', ar: 'غالباً ما يتخذ تنسيق "البث" مع بث واحد يتم إرساله إلى الجمهور.' },
+                            { en: 'Are often "live-streamed" to other platforms like Facebook Live and YouTube, or embedded on a site.', ar: 'غالباً ما يتم "بثها المباشر" إلى منصات أخرى مثل Facebook Live وYouTube، أو تضمينها في موقع ما.' },
+                            { en: 'Audience members are usually not able to interact with one another.', ar: 'عادةً لا يستطيع أعضاء الجمهور التفاعل مع بعضهم البعض.' }
+                        ], 'البث عبر الويب:'),
+                        card('3. Searching · البحث', [
+                            { en: 'One of the most common and proliferative search tools in technology today is the <span class="highlight-text">wiki</span>. Wikis are websites or hypertext document collections that allow users to edit and add content in an open-ended forum.', ar: 'واحدة من أكثر أدوات البحث شيوعاً وانتشاراً في التكنولوجيا اليوم هي <span class="highlight-text">الويكي</span>. الويكي هي مواقع ويب أو مجموعات مستندات نصية تشعبية تسمح للمستخدمين بتحرير وإضافة المحتوى في منتدى مفتوح.' }
+                        ], 'البحث:'),
+                        card('4. Instant Messaging · المراسلة الفورية', [
+                            { en: 'One of many collaborative Web chat tools available to any user with a computer and Internet access, continues to establish itself as a working, useful tool for informatics learning, providing instant access to and communication among people, information, and technology.', ar: 'واحدة من العديد من أدوات الدردشة التعاونية على الويب المتاحة لأي مستخدم لديه كمبيوتر ووصول إلى الإنترنت، تستمر في ترسيخ نفسها كأداة عملية ومفيدة للتعلم المعلوماتي، مما يوفر وصولاً فورياً وتواصلاً بين الأشخاص والمعلومات والتكنولوجيا.' },
+                            { en: 'Although some instant message (IM) services provide voice and video messages, all IM clients provide text in real time, allowing users to interact in the form of an on-screen conversation through a technology that is free, is already quite popular with users, is Web-based, does not require additional hardware or software, and has a very low learning curve.', ar: 'على الرغم من أن بعض خدمات المراسلة الفورية (IM) توفر رسائل صوتية ومرئية، إلا أن جميع عملاء IM يوفرون نصاً في الوقت الفعلي، مما يسمح للمستخدمين بالتفاعل في شكل محادثة على الشاشة من خلال تقنية مجانية، وتحظى بشعبية كبيرة بالفعل بين المستخدمين، وقائمة على الويب، ولا تتطلب أجهزة أو برامج إضافية، ولها منحنى تعلم منخفض جداً.' }
+                        ], 'المراسلة الفورية:'),
+                        card('5. Chats and Online Discussions (Blogs) · الدردشة والمناقشات عبر الإنترنت (المدونات)', [
+                            { en: 'Real-time chats occur all over the Internet, at each hour of every day.', ar: 'تحدث الدردشات في الوقت الفعلي في جميع أنحاء الإنترنت، في كل ساعة من كل يوم.' },
+                            { en: 'The best-known chat tools are instant messenger clients, but chatting also refers to real-time discussion venues in which users meet in virtual chat rooms to engage in conversations by posting messages.', ar: 'أشهر أدوات الدردشة هي عملاء المراسلة الفورية، لكن الدردشة تشير أيضاً إلى أماكن المناقشة في الوقت الفعلي حيث يلتقي المستخدمون في غرف دردشة افتراضية للانخراط في محادثات عن طريق نشر الرسائل.' },
+                            { en: 'This provides a comfortable, recognizable way of communicating for Net Generation students used to surfing the Web and interacting online.', ar: 'يوفر هذا طريقة مريحة ومألوفة للتواصل لطلاب جيل الإنترنت المعتادين على تصفح الويب والتفاعل عبر الإنترنت.' }
+                        ], 'الدردشة والمناقشات:'),
+                        card('6. Electronic Mailing Lists · القوائم البريدية الإلكترونية', [
+                            { en: 'One low-investment information-gathering tool for use by nursing professionals is membership in an <span class="highlight-text">electronic mailing list</span>.', ar: 'واحدة من أدوات جمع المعلومات منخفضة الاستثمار لاستخدامها من قبل المتخصصين في التمريض هي العضوية في <span class="highlight-text">قائمة بريدية إلكترونية</span>.' },
+                            { en: 'These electronic discussion groups use email to communicate and promote communication and collaboration with others interested in a particular field of study.', ar: 'تستخدم مجموعات المناقشة الإلكترونية هذه البريد الإلكتروني للتواصل وتعزيز التواصل والتعاون مع الآخرين المهتمين بمجال دراسة معين.' }
+                        ], 'القوائم البريدية الإلكترونية:'),
+                        card('7. Portals · البوابات', [
+                            { en: 'Similar to electronic mailing lists in the way they deliver specific information to one\'s email, a <span class="highlight-text">portal</span> allows the personalization of a specific website.', ar: 'على غرار القوائم البريدية الإلكترونية في طريقة توصيل معلومات محددة إلى بريد الشخص الإلكتروني، تسمح <span class="highlight-text">البوابة</span> بتخصيص موقع ويب معين.' },
+                            { en: 'Portals organize information from webpages into simple menus so that users may choose what they want to view and how they want to view it.', ar: 'تنظم البوابات المعلومات من صفحات الويب في قوائم بسيطة حتى يتمكن المستخدمون من اختيار ما يريدون عرضه وكيف يريدون عرضه.' }
+                        ], 'البوابات:'),
+                        card('8. Podcasts: Audio Pods and Video Pods · البودكاست: الصوت والفيديو', [
+                            { en: 'A <span class="highlight-text">podcast</span> is an audio recording linked to the Web that is then downloaded to an MP3 player, a smartphone, or a computer where the listener then accesses the recording or video.', ar: '<span class="highlight-text">البودكاست</span> هو تسجيل صوتي مرتبط بالويب يتم تنزيله بعد ذلك على مشغل MP3 أو هاتف ذكي أو كمبيوتر حيث يصل المستمع بعد ذلك إلى التسجيل أو الفيديو.' },
+                            { en: '<span class="highlight-text">Audio pod</span> is a term used to describe a traditional or audio-based podcast. Participating in podcasting can exercise not just basic technology skills, but also writing, editing, and speaking skills.', ar: '<span class="highlight-text">البودكاست الصوتي</span> هو مصطلح يستخدم لوصف البودكاست التقليدي أو القائم على الصوت. يمكن أن تمرس المشاركة في البودكاست ليس فقط مهارات التكنولوجيا الأساسية، ولكن أيضاً مهارات الكتابة والتحرير والتحدث.' },
+                            { en: 'Writing scripts for a podcast can be an excellent exercise in critical thinking and information delivery, whereas the technology itself allows global access to information by faculty, teachers, and students anywhere at any time.', ar: 'يمكن أن تكون كتابة نصوص البودكاست تمريناً ممتازاً في التفكير النقدي وتوصيل المعلومات، في حين أن التكنولوجيا نفسها تسمح بالوصول العالمي إلى المعلومات من قبل أعضاء هيئة التدريس والمعلمين والطلاب في أي مكان وفي أي وقت.' },
+                            { en: 'Similar to an audio pod in setup and accessibility, a <span class="highlight-text">video pod</span> is a podcast that provides video in addition to audio functionality.', ar: 'على غرار البودكاست الصوتي في الإعداد وإمكانية الوصول، <span class="highlight-text">البودكاست المرئي</span> هو بودكاست يوفر الفيديو بالإضافة إلى وظيفة الصوت.' },
+                            { en: 'Faculty might use video podcasts to demonstrate concepts, interview experts in the field, and even assess student progress.', ar: 'قد يستخدم أعضاء هيئة التدريس البودكاست المرئي لشرح المفاهيم ومقابلة الخبراء في المجال وحتى تقييم تقدم الطلاب.' }
+                        ], 'البودكاست:'),
+                        card('9. Multimedia · الوسائط المتعددة', [
+                            { en: 'Generally, <span class="highlight-text">multimedia</span> refers to a computer-based technology that incorporates traditional forms of communication to create a seamless and interactive learning environment, such as interactive tutorials, streaming video, and problem-solving programs.', ar: 'بشكل عام، تشير <span class="highlight-text">الوسائط المتعددة</span> إلى تكنولوجيا قائمة على الكمبيوتر تدمج أشكال الاتصال التقليدية لإنشاء بيئة تعلم سلسة وتفاعلية، مثل الدروس التعليمية التفاعلية والفيديو المتدفق وبرامج حل المشكلات.' }
+                        ], 'الوسائط المتعددة:')
+                    ]
+                },
+                {
+                    title: 'Health Care Trends of the Future · اتجاهات الرعاية الصحية في المستقبل',
+                    cards: [
+                        card('Introduction · المقدمة', [
+                            { en: 'Looking ahead at how nursing informatics roles will evolve, and how they will impact health care of the future, it is important to understand the trends that are impacting health care today.', ar: 'بالنظر إلى الأمام في كيفية تطور أدوار معلوماتية التمريض، وكيف ستؤثر على الرعاية الصحية في المستقبل، من المهم فهم الاتجاهات التي تؤثر على الرعاية الصحية اليوم.' }
+                        ], 'المقدمة:'),
+                        card('1. Portals and Personal Health Records · البوابات والسجلات الصحية الشخصية', [
+                            { en: 'Patient portals have been in use for more than ten years.', ar: 'تم استخدام بوابات المرضى لأكثر من عشر سنوات.' },
+                            { en: 'Adoption has been variable and there is still a lack of interoperability between patient records, personal health information, and alignment with all a patient experiences across a full continuum of care.', ar: 'كان التبني متغيراً ولا يزال هناك نقص في قابلية التشغيل البيني بين سجلات المرضى والمعلومات الصحية الشخصية والتوافق مع جميع تجارب المريض عبر سلسلة الرعاية الكاملة.' },
+                            { en: 'In the past, portals were primarily aligned with the provider\'s EHR, and while there are good results reported with portals, there are often challenges with language, the ability to access portals, and ongoing access of the portals.', ar: 'في الماضي، كانت البوابات تتماشى في المقام الأول مع السجل الصحي الإلكتروني لمقدم الرعاية، وعلى الرغم من وجود نتائج جيدة تم الإبلاغ عنها مع البوابات، إلا أن هناك غالباً تحديات تتعلق باللغة والقدرة على الوصول إلى البوابات والوصول المستمر إليها.' }
+                        ], 'البوابات والسجلات الصحية الشخصية:'),
+                        card('Factors Influencing the Rise of Personal Health Information Technology · العوامل المؤثرة في ظهور تكنولوجيا المعلومات الصحية الشخصية', [
+                            { en: 'A growing dependency on digital and mobile technologies in everyday life.', ar: 'الاعتماد المتزايد على التقنيات الرقمية والمحمولة في الحياة اليومية.' },
+                            { en: 'Expectations for real-time access to traditional place-based and virtual health services.', ar: 'التوقعات للوصول في الوقت الفعلي إلى الخدمات الصحية التقليدية القائمة على المكان والافتراضية.' },
+                            { en: 'Increased clinical and financial responsibilities for patients.', ar: 'زيادة المسؤوليات السريرية والمالية للمرضى.' },
+                            { en: 'Pressure on providers to transition from episode to value-based and population health focus.', ar: 'الضغط على مقدمي الرعاية للانتقال من التركيز على الحالات إلى التركيز على القيمة والصحة السكانية.' }
+                        ], 'العوامل المؤثرة:'),
+                        card('2. Advances of Technology · تقدم التكنولوجيا', [
+                            { en: 'Advances in technology are developing rapidly and new technology is constantly thrust upon us.', ar: 'تتطور التطورات التكنولوجية بسرعة ويتم دفع التكنولوجيا الجديدة إلينا باستمرار.' }
+                        ], 'تقدم التكنولوجيا:'),
+                        card('How Technologies Will Impact the Future of Health Care and the Role of Nursing Informatics · كيف ستؤثر التقنيات على مستقبل الرعاية الصحية ودور معلوماتية التمريض', [
+                            { en: 'Development of <span class="highlight-text">mobility</span> that will provide clinicians with the ability to manage everything from access to patient records, to connecting various technologies such as integration of vital signs from a patient "wearable" into the record, to managing outcomes for a patient or population from a mobile device or smartphone.', ar: 'تطوير <span class="highlight-text">التنقل</span> الذي سيوفر للأطباء القدرة على إدارة كل شيء من الوصول إلى سجلات المرضى، إلى ربط التقنيات المختلفة مثل دمج العلامات الحيوية من "الأجهزة القابلة للارتداء" للمريض في السجل، إلى إدارة نتائج مريض أو مجموعة سكانية من جهاز محمول أو هاتف ذكي.' },
+                            { en: 'The ability to collect information directly from <span class="highlight-text">wearable devices</span>.', ar: 'القدرة على جمع المعلومات مباشرة من <span class="highlight-text">الأجهزة القابلة للارتداء</span>.' },
+                            { en: '<span class="highlight-text">Telemedicine</span>, which is beginning to show real value in health care and the requirements to govern and support its use are becoming better defined.', ar: '<span class="highlight-text">التطبيب عن بُعد</span>، الذي بدأ يظهر قيمة حقيقية في الرعاية الصحية وأصبحت متطلبات حوكمة ودعم استخدامه محددة بشكل أفضل.' },
+                            { en: '<span class="highlight-text">Predictive and prescriptive analytics</span>: the ability to take information input from multiple data sources and predetermine where patients are at risk of a variety of conditions and care concerns.', ar: '<span class="highlight-text">التحليلات التنبؤية والإرشادية</span>: القدرة على أخذ مدخلات المعلومات من مصادر بيانات متعددة وتحديد مسبق للمرضى المعرضين لخطر مجموعة متنوعة من الحالات ومخاوف الرعاية.' }
+                        ], 'تأثير التقنيات:'),
+                        card('3. Professional Development · التطوير المهني', [
+                            { en: 'As nursing informatics continues to evolve and meet the needs of the future, it is important that we stay connected and provide for the ongoing professional development of individual nurse informaticists as well as supporting the advancement of nursing informatics as an essential domain within nursing.', ar: 'بينما تستمر معلوماتية التمريض في التطور وتلبية احتياجات المستقبل، من المهم أن نبقى على اتصال ونوفر التطوير المهني المستمر للممرضين المعلوماتيين الأفراد وكذلك دعم النهوض بمعلوماتية التمريض كمجال أساسي داخل التمريض.' }
+                        ], 'التطوير المهني:')
+                    ]
+                }
+            ]
+        };
+
+        // ================================================================
+        //  BUILD APP
+        // ================================================================
+        const slidesData = { 
+            lecture1: lecture1Data,
+            lecture2: lecture2Data,
+            lecture3: lecture3Data,
+            lecture4: lecture4Data,
+            lecture5: lecture5Data
+        };
+        const sectionOrder = ['lecture1', 'lecture2', 'lecture3', 'lecture4', 'lecture5'];
+
+        function renderSlideContent(slide) {
+            if (slide.cards && Array.isArray(slide.cards)) {
+                return createSlideHTML(slide.title, slide.cards.join(''));
+            }
+            return createSlideHTML(slide.title, '');
+        }
+
+        function buildApp() {
+            const tabsContainer = document.getElementById('tabsContainer');
+            const sectionsContainer = document.getElementById('sectionsContainer');
+
+            sectionOrder.forEach((secId, index) => {
+                const sec = slidesData[secId];
+                if (!sec) return;
+
+                const tab = document.createElement('button');
+                tab.className = 'tab-btn' + (index === 0 ? ' active' : '');
+                tab.innerHTML = `<span class="en">${sec.titleEn}</span><span class="ar">${sec.titleAr}</span>`;
+                tab.onclick = () => switchTab(secId, tab);
+                tabsContainer.appendChild(tab);
+
+                const cardEl = document.createElement('div');
+                cardEl.className = 'card' + (index === 0 ? ' active' : '');
+                cardEl.id = `section-${secId}`;
+
+                const slidesHTML = sec.slides.map(s => renderSlideContent(s)).join('');
+                const totalSlides = sec.slides.length;
+
+                cardEl.innerHTML = `
+                    <h2>${sec.titleEn} · ${sec.titleAr}</h2>
+                    <div style="text-align:center; margin-bottom:12px;">
+                        <button class="pdf-btn" onclick="downloadPDF('${secId}')">📄 تحميل المحاضرة PDF</button>
+                    </div>
+                    <div class="slide-container" id="slideContainer-${secId}">
+                        <div class="slide-progress">
+                            <span style="font-weight:600;">التقدم</span>
+                            <div class="bar"><div class="fill" style="width:0%;"></div></div>
+                            <span class="count">1 / ${totalSlides}</span>
+                        </div>
+                        ${slidesHTML}
+                        <div class="slide-nav">
+                            <button class="btn-nav prev" onclick="goToSlide('${secId}', 'slideContainer-${secId}', slideState['${secId}'].current - 1)">السابق</button>
+                            <button class="btn-nav next primary" onclick="goToSlide('${secId}', 'slideContainer-${secId}', slideState['${secId}'].current + 1)">التالي</button>
+                        </div>
+                    </div>
+                `;
+                sectionsContainer.appendChild(cardEl);
+
+                initSlideState(secId, totalSlides);
+                setTimeout(() => renderSlide(secId, `slideContainer-${secId}`), 50);
+            });
+
+            setTimeout(() => initTTS(), 200);
+        }
+
+        function switchTab(secId, tabEl) {
+            document.querySelectorAll('.card').forEach(c => c.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(t => t.classList.remove('active'));
+            document.getElementById(`section-${secId}`).classList.add('active');
+            tabEl.classList.add('active');
+        }
+
+        // ================================================================
+        //  INIT
+        // ================================================================
+        applyTheme(localStorage.getItem('theme') || 'dark');
+        buildApp();
+
+        window.goToSlide = goToSlide;
+        window.slideState = slideState;
+        window.toggleTheme = toggleTheme;
+        window.toggleCardTranslation = toggleCardTranslation;
+        window.downloadPDF = downloadPDF;
+    </script>
+</body>
+</html>
